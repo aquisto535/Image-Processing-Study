@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\user\\Documents\\GitHub\\Image-Processing-Study\\BmpShow\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3CE147F5-2109-CA36-A85C-9E55ACE49A2A}|BmpShow.vcxproj|C:\\Users\\user\\Documents\\GitHub\\Image-Processing-Study\\BmpShow\\BmpShowView.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{3CE147F5-2109-CA36-A85C-9E55ACE49A2A}|BmpShow.vcxproj|solutionrelative:BmpShowView.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BmpShowView.cpp",
+              "DocumentMoniker": "C:\\Users\\user\\Documents\\GitHub\\Image-Processing-Study\\BmpShow\\BmpShowView.cpp",
+              "RelativeDocumentMoniker": "BmpShowView.cpp",
+              "ToolTip": "C:\\Users\\user\\Documents\\GitHub\\Image-Processing-Study\\BmpShow\\BmpShowView.cpp",
+              "RelativeToolTip": "BmpShowView.cpp",
+              "ViewState": "AgIAAJoAAAAAAAAAAAAEwKoAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-07-28T14:54:22.288Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
