@@ -46,6 +46,19 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	// 이미지 확대 비율
+	int m_nZoom;
+	void SetScrollSizeToFit();
+	afx_msg void OnViewZoom1();
+	afx_msg void OnUpdateViewZoom1(CCmdUI* pCmdUI);
+	afx_msg void OnViewZoom2();
+	afx_msg void OnUpdateViewZoom2(CCmdUI* pCmdUI);
+	afx_msg void OnViewZoom3();
+	afx_msg void OnUpdateViewZoom3(CCmdUI* pCmdUI);
+	afx_msg void OnViewZoom4();
+	afx_msg void OnUpdateViewZoom4(CCmdUI* pCmdUI);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	void ShowImageInfo(CPoint point);
 };
 
 #ifndef _DEBUG  // ImageToolView.cpp의 디버그 버전

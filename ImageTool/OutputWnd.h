@@ -33,17 +33,10 @@ public:
 
 // 특성입니다.
 protected:
-	CMFCTabCtrl	m_wndTabs;
+	COutputList m_wndOutputInfo;
 
-	COutputList m_wndOutputBuild;
-	COutputList m_wndOutputDebug;
-	COutputList m_wndOutputFind;
 
 protected:
-	void FillBuildWindow();
-	void FillDebugWindow();
-	void FillFindWindow();
-
 	void AdjustHorzScroll(CListBox& wndListBox);
 
 // 구현입니다.
@@ -55,5 +48,7 @@ protected:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 
 	DECLARE_MESSAGE_MAP()
+public:
+	void AddString(CString message);
 };
 

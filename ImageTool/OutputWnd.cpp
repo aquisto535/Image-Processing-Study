@@ -36,44 +36,16 @@ int COutputWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CRect rectDummy;
 	rectDummy.SetRectEmpty();
 
-	// 탭 창을 만듭니다.
-	if (!m_wndTabs.Create(CMFCTabCtrl::STYLE_FLAT, rectDummy, this, 1))
-	{
-		TRACE0("출력 탭 창을 만들지 못했습니다.\n");
-		return -1;      // 만들지 못했습니다.
-	}
-
 	// 출력 창을 만듭니다.
 	const DWORD dwStyle = LBS_NOINTEGRALHEIGHT | WS_CHILD | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL;
 
-	if (!m_wndOutputBuild.Create(dwStyle, rectDummy, &m_wndTabs, 2) ||
-		!m_wndOutputDebug.Create(dwStyle, rectDummy, &m_wndTabs, 3) ||
-		!m_wndOutputFind.Create(dwStyle, rectDummy, &m_wndTabs, 4))
+	if (!m_wndOutputInfo.Create(dwStyle, rectDummy, this, 1))
 	{
 		TRACE0("출력 창을 만들지 못했습니다.\n");
 		return -1;      // 만들지 못했습니다.
 	}
 
 	UpdateFonts();
-
-	CString strTabName;
-	BOOL bNameValid;
-
-	// 탭에 목록 창을 연결합니다.
-	bNameValid = strTabName.LoadString(IDS_BUILD_TAB);
-	ASSERT(bNameValid);
-	m_wndTabs.AddTab(&m_wndOutputBuild, strTabName, (UINT)0);
-	bNameValid = strTabName.LoadString(IDS_DEBUG_TAB);
-	ASSERT(bNameValid);
-	m_wndTabs.AddTab(&m_wndOutputDebug, strTabName, (UINT)1);
-	bNameValid = strTabName.LoadString(IDS_FIND_TAB);
-	ASSERT(bNameValid);
-	m_wndTabs.AddTab(&m_wndOutputFind, strTabName, (UINT)2);
-
-	// 출력 탭을 더미 텍스트로 채웁니다.
-	FillBuildWindow();
-	FillDebugWindow();
-	FillFindWindow();
 
 	return 0;
 }
@@ -83,7 +55,7 @@ void COutputWnd::OnSize(UINT nType, int cx, int cy)
 	CDockablePane::OnSize(nType, cx, cy);
 
 	// Tab 컨트롤은 전체 클라이언트 영역을 처리해야 합니다.
-	m_wndTabs.SetWindowPos (nullptr, -1, -1, cx, cy, SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER);
+	m_wndOutputInfo.SetWindowPos (nullptr, -1, -1, cx, cy, SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER);
 }
 
 void COutputWnd::AdjustHorzScroll(CListBox& wndListBox)
@@ -105,32 +77,9 @@ void COutputWnd::AdjustHorzScroll(CListBox& wndListBox)
 	dc.SelectObject(pOldFont);
 }
 
-void COutputWnd::FillBuildWindow()
-{
-	m_wndOutputBuild.AddString(_T("여기에 빌드 출력이 표시됩니다."));
-	m_wndOutputBuild.AddString(_T("출력이 목록 뷰 행에 표시되지만"));
-	m_wndOutputBuild.AddString(_T("표시 방법을 원하는 대로 변경할 수 있습니다."));
-}
-
-void COutputWnd::FillDebugWindow()
-{
-	m_wndOutputDebug.AddString(_T("여기에 디버그 출력이 표시됩니다."));
-	m_wndOutputDebug.AddString(_T("출력이 목록 뷰 행에 표시되지만"));
-	m_wndOutputDebug.AddString(_T("표시 방법을 원하는 대로 변경할 수 있습니다."));
-}
-
-void COutputWnd::FillFindWindow()
-{
-	m_wndOutputFind.AddString(_T("여기에 찾기 출력이 표시됩니다."));
-	m_wndOutputFind.AddString(_T("출력이 목록 뷰 행에 표시되지만"));
-	m_wndOutputFind.AddString(_T("표시 방법을 원하는 대로 변경할 수 있습니다."));
-}
-
 void COutputWnd::UpdateFonts()
 {
-	m_wndOutputBuild.SetFont(&afxGlobalData.fontRegular);
-	m_wndOutputDebug.SetFont(&afxGlobalData.fontRegular);
-	m_wndOutputFind.SetFont(&afxGlobalData.fontRegular);
+	m_wndOutputInfo.SetFont(&afxGlobalData.fontRegular);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -177,12 +126,30 @@ void COutputList::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 
 void COutputList::OnEditCopy()
 {
-	MessageBox(_T("출력 복사"));
+	int nIndex = GetCurSel();
+	if (nIndex == LB_ERR)
+		return;
+
+	CString message;
+	GetText(nIndex, message);
+
+	size_t nLength = (message.GetLength() + 1) * sizeof(TCHAR);
+	HGLOBAL hData = GlobalAlloc(GMEM_MOVEABLE, nLength);
+	memcpy_s(GlobalLock(hData), nLength, message.LockBuffer(), nLength);
+	GlobalUnlock(hData);
+	message.UnlockBuffer();
+
+	if (OpenClipboard())
+	{
+		EmptyClipboard();
+		SetClipboardData(CF_UNICODETEXT, hData);
+		CloseClipboard();
+	}
 }
 
 void COutputList::OnEditClear()
 {
-	MessageBox(_T("출력 지우기"));
+	ResetContent();
 }
 
 void COutputList::OnViewOutput()
@@ -197,4 +164,10 @@ void COutputList::OnViewOutput()
 		pMainFrame->RecalcLayout();
 
 	}
+}
+
+void COutputWnd::AddString(CString message)
+{
+	m_wndOutputInfo.AddString(message);
+	m_wndOutputInfo.SetCurSel(m_wndOutputInfo.GetCount() - 1);
 }

@@ -27,12 +27,14 @@ BEGIN_MESSAGE_MAP(CImageToolApp, CWinAppEx)
 	ON_COMMAND(ID_FILE_OPEN, &CWinAppEx::OnFileOpen)
 	// 표준 인쇄 설정 명령입니다.
 	ON_COMMAND(ID_FILE_PRINT_SETUP, &CWinAppEx::OnFilePrintSetup)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_PASTE, &CImageToolApp::OnUpdateEditPaste)
 END_MESSAGE_MAP()
 
 
 // CImageToolApp 생성
 
 CImageToolApp::CImageToolApp() noexcept
+	: m_pNewDib(NULL)
 {
 	m_bHiColorIcons = TRUE;
 
@@ -170,6 +172,33 @@ int CImageToolApp::ExitInstance()
 
 // CImageToolApp 메시지 처리기
 
+// 영상 새 창에 띄우기 전역 함수 정의
+void AfxNewBitmap(IppDib& dib)
+{
+	theApp.m_pNewDib = &dib;
+	AfxGetMainWnd()->SendMessage(WM_COMMAND, ID_FILE_NEW);
+}
+
+// 출력창에 영상 처리 정보 문자열 출력
+void AfxPrintInfo(CString message)
+{
+	CMainFrame* pFrame = (CMainFrame*)AfxGetMainWnd();
+	pFrame->m_wndOutput.AddString(message);
+}
+
+void AfxPrintInfo(LPCTSTR lpszFormat, ...)
+{
+	CString message = _T("");
+
+	va_list argList;
+	va_start(argList, lpszFormat);
+	message.FormatV(lpszFormat, argList);
+	va_end(argList);
+
+	AfxPrintInfo(message);
+}
+
+
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
 
@@ -230,6 +259,11 @@ void CImageToolApp::SaveCustomState()
 }
 
 // CImageToolApp 메시지 처리기
+
+void CImageToolApp::OnUpdateEditPaste(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(IsClipboardFormatAvailable(CF_DIB));
+}
 
 
 
