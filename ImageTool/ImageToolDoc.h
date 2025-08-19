@@ -53,6 +53,13 @@ public:
 	afx_msg void OnWindowDuplicate();
 	afx_msg void OnEditCopy();
 	afx_msg void OnEditPaste();
+	afx_msg void OnImageInverse();
+	afx_msg void OnUpdateImageInverse(CCmdUI* pCmdUI);
+	afx_msg void OnBrightnessContrast();
+	afx_msg void OnGammaCorrection();
+	afx_msg void OnViewHistogram();
+	afx_msg void OnHistoStretching();
+	afx_msg void OnHistoEqualization();
 };
 
 

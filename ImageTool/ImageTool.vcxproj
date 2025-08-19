@@ -183,14 +183,18 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CBrightnessContrastDlg.h" />
     <ClInclude Include="CFileNewDlg.h" />
+    <ClInclude Include="CGammaCorrectionDlg.h" />
     <ClInclude Include="ChildFrm.h" />
+    <ClInclude Include="CHistogramDlg.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ImageTool.h" />
     <ClInclude Include="ImageToolDoc.h" />
     <ClInclude Include="ImageToolView.h" />
     <ClInclude Include="IppImage\IppConvert.h" />
     <ClInclude Include="IppImage\IppDib.h" />
+    <ClInclude Include="IppImage\IppEnhance.h" />
     <ClInclude Include="IppImage\IppImage.h" />
     <ClInclude Include="IppImage\RGBBYTE.h" />
     <ClInclude Include="MainFrm.h" />
@@ -200,13 +204,17 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CBrightnessContrastDlg.cpp" />
     <ClCompile Include="CFileNewDlg.cpp" />
+    <ClCompile Include="CGammaCorrectionDlg.cpp" />
     <ClCompile Include="ChildFrm.cpp" />
+    <ClCompile Include="CHistogramDlg.cpp" />
     <ClCompile Include="ImageTool.cpp" />
     <ClCompile Include="ImageToolDoc.cpp" />
     <ClCompile Include="ImageToolView.cpp" />
     <ClCompile Include="IppImage\IppConvert.cpp" />
     <ClCompile Include="IppImage\IppDib.cpp" />
+    <ClCompile Include="IppImage\IppEnhance.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="OutputWnd.cpp" />
     <ClCompile Include="pch.cpp">
@@ -229,6 +237,7 @@
     <Image Include="res\output_wnd.ico" />
     <Image Include="res\output_wnd_hc.ico" />
     <Image Include="res\Toolbar.bmp" />
+    <Image Include="res\toolbar1.bmp" />
     <Image Include="res\Toolbar256.bmp" />
     <Image Include="res\userimages.bmp" />
   </ItemGroup>

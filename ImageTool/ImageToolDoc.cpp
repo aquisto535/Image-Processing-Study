@@ -12,12 +12,26 @@
 #endif
 
 #include "ImageToolDoc.h"
+#include "IppImage/IppImage.h"
+#include "IppImage/IppConvert.h"
+#include "IppImage/IppEnhance.h"
+#include "CBrightnessContrastDlg.h"
+#include "CGammaCorrectionDlg.h"
+#include "CHistogramDlg.h"
 
 #include <propkey.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
+
+#define CONVERT_DIB_TO_BYTEIMAGE(m_dib, img) \
+	IppByteImage img; \
+	IppDibToImage(m_dib, img); 
+
+#define CONVERT_IMAGE_TO_DIB(img, dib) \
+	IppDib dib; \
+	IppImageToDib(img, dib); 	
 
 // CImageToolDoc
 
@@ -27,6 +41,13 @@ BEGIN_MESSAGE_MAP(CImageToolDoc, CDocument)
 	ON_COMMAND(ID_WINDOW_DUPLICATE, &CImageToolDoc::OnWindowDuplicate)
 	ON_COMMAND(ID_EDIT_COPY, &CImageToolDoc::OnEditCopy)
 	ON_COMMAND(ID_EDIT_PASTE, &CImageToolDoc::OnEditPaste)
+	ON_COMMAND(ID_IMAGE_INVERSE, &CImageToolDoc::OnImageInverse)
+	ON_UPDATE_COMMAND_UI(ID_IMAGE_INVERSE, &CImageToolDoc::OnUpdateImageInverse)
+	ON_COMMAND(ID_BRIGHTNESS_CONTRAST, &CImageToolDoc::OnBrightnessContrast)
+	ON_COMMAND(ID_GAMMA_CORRECTION, &CImageToolDoc::OnGammaCorrection)
+	ON_COMMAND(ID_VIEW_HISTOGRAM, &CImageToolDoc::OnViewHistogram)
+	ON_COMMAND(ID_HISTO_STRETCHING, &CImageToolDoc::OnHistoStretching)
+	ON_COMMAND(ID_HISTO_EQUALIZATION, &CImageToolDoc::OnHistoEqualization)
 END_MESSAGE_MAP()
 
 
@@ -209,4 +230,105 @@ void CImageToolDoc::OnEditPaste()
 	IppDib dib;
 	if (dib.PasteFromClipboard())
 		AfxNewBitmap(dib);
+}
+
+void CImageToolDoc::OnImageInverse()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+
+	CONVERT_DIB_TO_BYTEIMAGE(m_Dib,img); // 매크로 이름만 보아도 무슨 동작을 하는지 쉽게 알 수 있음(반복되는 구문을 매크로로 구성)
+
+	IppInverse(img);
+
+	CONVERT_IMAGE_TO_DIB(img, dib); // ""
+
+	AfxPrintInfo(_T("[반전] 입력 영상: %s"), GetTitle());
+
+	AfxNewBitmap(dib);
+}
+
+void CImageToolDoc::OnUpdateImageInverse(CCmdUI* pCmdUI)
+{
+	// TODO: 여기에 명령 업데이트 UI 처리기 코드를 추가합니다.
+
+	pCmdUI->Enable(m_Dib.IsValid() && m_Dib.GetBitCount() == 8); // 8비트 그레이스케일 비트맵만 반전 가능
+}
+
+void CImageToolDoc::OnBrightnessContrast()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CBrightnessContrastDlg dlg;
+
+	if (dlg.DoModal() == IDOK)
+	{
+		CONVERT_DIB_TO_BYTEIMAGE(m_Dib, img)
+		IppBrightness(img, dlg.m_nBrightness);
+		IppContrast(img, dlg.m_nContrast);
+		CONVERT_IMAGE_TO_DIB(img, dib)
+
+		AfxPrintInfo(_T("[밝기/명암비 조절] 영상 이름: %s, 밝기: %d, 명암비: %d%%"), 
+			GetTitle(), dlg.m_nBrightness, dlg.m_nContrast);
+		AfxNewBitmap(dib);
+	}
+}
+
+void CImageToolDoc::OnGammaCorrection()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+
+	CGammaCorrectionDlg dlg;
+	if (dlg.DoModal() == IDOK)
+	{
+		CONVERT_DIB_TO_BYTEIMAGE(m_Dib, img)
+		IppGammaCorrection(img, dlg.m_fGamma);
+		CONVERT_IMAGE_TO_DIB(img, dib)
+		AfxPrintInfo(_T("[감마 보정] 영상 이름: %s, 감마 값: %.2f"), 
+			GetTitle(), dlg.m_fGamma);
+		AfxNewBitmap(dib);
+	}
+}
+
+void CImageToolDoc::OnViewHistogram()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+
+	CHistogramDlg dlg;
+	dlg.SetImage(&m_Dib);
+	if (dlg.DoModal() == IDOK)
+	{
+		// 히스토그램 대화 상자에서 별도의 처리는 필요 없음
+		// 대화 상자에서 그리기 작업을 처리함
+	}
+}
+
+void CImageToolDoc::OnHistoStretching()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+
+	if (m_Dib.GetBitCount() == 8)
+	{
+		CONVERT_DIB_TO_BYTEIMAGE(m_Dib, img)
+		IppHistogramStretching(img);
+		CONVERT_IMAGE_TO_DIB(img, dib)
+
+		AfxPrintInfo(_T("[히스토그램 스트레칭] 입력 영상: %s"), GetTitle());
+		AfxNewBitmap(dib);
+	}
+
+}
+
+void CImageToolDoc::OnHistoEqualization()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+
+	if (m_Dib.GetBitCount() == 8)
+	{
+		CONVERT_DIB_TO_BYTEIMAGE(m_Dib, img)
+		IppHistogramEqualization(img);
+		CONVERT_IMAGE_TO_DIB(img, dib)
+
+		AfxPrintInfo(_T("[히스토그램 균등화] 입력 영상: %s"), GetTitle());
+		AfxNewBitmap(dib);
+	}
+
 }
