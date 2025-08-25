@@ -37,7 +37,8 @@ public:
 	DECLARE_MESSAGE_MAP()
 
 public:
-	IppDib* m_pNewDib;
+	IppDib* m_pNewDib; // 새로 만들기 대화 상자에서 지정한 크기의 빈 비트맵을 전달하는 용도
+	CMultiDocTemplate* m_pImageDocTemplate;
 };
 
 extern CImageToolApp theApp;

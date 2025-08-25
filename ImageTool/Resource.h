@@ -30,6 +30,7 @@
 #define IDD_BRIGHTNESS_CONTRAST         316
 #define IDD_GAMMA_CORRECTION            318
 #define IDD_HISTOGRAM                   320
+#define IDD_ARITHMETIC_LOGICAL          324
 #define IDC_WIDTH                       1000
 #define IDC_HEIGHT                      1001
 #define IDC_IMAGE_TYPE                  1002
@@ -39,6 +40,14 @@
 #define IDC_GAMMA_SLIDER                1005
 #define IDC_CONTRAST_EDIT               1006
 #define IDC_GAMMA_EDIT                  1006
+#define IDC_COMBO_IMAGE1                1007
+#define IDC_COMBO_IMAGE2                1008
+#define IDC_FUNCTION1                   1009
+#define IDC_FUNCTION2                   1010
+#define IDC_FUNCTION3                   1011
+#define IDC_FUNCTION4                   1012
+#define IDC_FUNCTION5                   1013
+#define IDC_FUNCTION6                   1014
 #define ID_32771                        32771
 #define ID_WINDOW_DUPLICATE             32772
 #define ID_32773                        32773
@@ -66,14 +75,16 @@
 #define ID_HISTO_STRETCHING             32795
 #define ID_EQUALIZATION                 32796
 #define ID_HISTO_EQUALIZATION           32797
+#define ID_32798                        32798
+#define ID_ARITHMETIC_LOGICAL           32799
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        324
-#define _APS_NEXT_COMMAND_VALUE         32798
-#define _APS_NEXT_CONTROL_VALUE         1007
+#define _APS_NEXT_RESOURCE_VALUE        326
+#define _APS_NEXT_COMMAND_VALUE         32800
+#define _APS_NEXT_CONTROL_VALUE         1015
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

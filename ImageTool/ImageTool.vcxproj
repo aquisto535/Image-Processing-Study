@@ -183,6 +183,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CArithmeticLogicalDlg.h" />
     <ClInclude Include="CBrightnessContrastDlg.h" />
     <ClInclude Include="CFileNewDlg.h" />
     <ClInclude Include="CGammaCorrectionDlg.h" />
@@ -204,6 +205,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CArithmeticLogicalDlg.cpp" />
     <ClCompile Include="CBrightnessContrastDlg.cpp" />
     <ClCompile Include="CFileNewDlg.cpp" />
     <ClCompile Include="CGammaCorrectionDlg.cpp" />
