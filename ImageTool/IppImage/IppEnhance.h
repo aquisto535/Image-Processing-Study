@@ -21,3 +21,5 @@ bool IppDiff(IppByteImage& img1, IppByteImage& img2, IppByteImage& img3);
 // 영상 논리 연산 함수
 bool IppAND(IppByteImage& img1, IppByteImage& img2, IppByteImage& img3);
 bool IppOR(IppByteImage& img1, IppByteImage& img2, IppByteImage& img3);
+
+void IppBitPlane(IppByteImage& img1, IppByteImage& img2, int bit);
