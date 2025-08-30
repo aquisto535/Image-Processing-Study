@@ -163,17 +163,19 @@ void PerformanceAnalyzer::generateReport(const string& output_file) {
     fs << "}";
     fs.release();
 
-    cout << "📊 리포트 생성 완료: " << output_file << endl;
+    cout << "리포트 생성 완료: " << output_file << endl;
 }
 
 // 현재 날짜/시간 문자열 반환
 string PerformanceAnalyzer::getCurrentDateTime() {
     auto now = chrono::system_clock::now();
     auto time_t = chrono::system_clock::to_time_t(now);
-    auto tm = *localtime(&time_t);
+    //auto tm = *localtime(&time_t);
+    struct tm timeinfo;
+    auto tm =  localtime_s(&timeinfo, &time_t);
 
     stringstream ss;
-    ss << put_time(&tm, "%Y-%m-%d %H:%M:%S");
+    ss << put_time(&timeinfo, "%Y-%m-%d %H:%M:%S");
     return ss.str();
 }
 

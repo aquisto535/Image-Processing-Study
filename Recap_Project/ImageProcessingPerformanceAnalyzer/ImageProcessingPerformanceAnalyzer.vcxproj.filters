@@ -39,6 +39,9 @@
     <ClCompile Include="TestImageGenerator.cpp">
       <Filter>Src\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="DualImplementationProcessor.cpp">
+      <Filter>Src\Core\소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PerformanceAnalyzer.h">
@@ -49,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="TestImageGenerator.h">
       <Filter>Src\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="DualImplementationProcessor.h">
+      <Filter>Src\Core\헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
