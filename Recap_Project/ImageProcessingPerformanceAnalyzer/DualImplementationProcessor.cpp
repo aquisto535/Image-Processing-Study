@@ -6,18 +6,18 @@
 #include <cmath>
 #include <algorithm>
 
-// ÀÔ·Â °ËÁõ
+// ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½ï¿½
 void DualImplementationProcessor::validateInput(const cv::Mat& input) {
     if (input.empty()) {
-        throw std::invalid_argument("ÀÔ·Â ÀÌ¹ÌÁö°¡ ºñ¾îÀÖ½À´Ï´Ù.");
+        throw std::invalid_argument("ï¿½Ô·ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½Ï´ï¿½.");
     }
 
     if (input.depth() != CV_8U) {
-        throw std::invalid_argument("ÀÔ·Â ÀÌ¹ÌÁö´Â 8ºñÆ® unsigned¿©¾ß ÇÕ´Ï´Ù.");
+        throw std::invalid_argument("ï¿½Ô·ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ 8ï¿½ï¿½Æ® unsignedï¿½ï¿½ï¿½ï¿½ ï¿½Õ´Ï´ï¿½.");
     }
 }
 
-// Raw ÀÌ¹ÌÁö ÇïÆÛ ÇÔ¼öµé
+// Raw ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½
 unsigned char* DualImplementationProcessor::createRawImage(int width, int height, int channels) {
     return new unsigned char[width * height * channels];
 }
@@ -36,7 +36,7 @@ void DualImplementationProcessor::copyRawToMat(const unsigned char* raw_data, cv
     memcpy(output.data, raw_data, total_pixels);
 }
 
-// ==================== ¹à±â Á¶Àı ====================
+// ==================== ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ====================
 
 cv::Mat DualImplementationProcessor::BrightnessAdjustment::opencv_version(const cv::Mat& input, int brightness) {
     validateInput(input);
@@ -44,7 +44,7 @@ cv::Mat DualImplementationProcessor::BrightnessAdjustment::opencv_version(const 
     cv::Mat result;
     input.convertTo(result, -1, 1.0, brightness);
 
-    // 0-255 ¹üÀ§·Î Å¬¸®ÇÎ
+    // 0-255 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
     cv::threshold(result, result, 255, 255, cv::THRESH_TRUNC);
     cv::threshold(result, result, 0, 0, cv::THRESH_TOZERO);
 
@@ -54,34 +54,35 @@ cv::Mat DualImplementationProcessor::BrightnessAdjustment::opencv_version(const 
 cv::Mat DualImplementationProcessor::BrightnessAdjustment::custom_version(const cv::Mat& input, int brightness) {
     validateInput(input);
 
-    int width = input.cols;
-    int height = input.rows;
-    int channels = input.channels();
-
-    // Raw µ¥ÀÌÅÍ ÃßÃâ
-    unsigned char* raw_input = input.data;
-
-    // RawÇÑ ¹à±â Á¶Àı ¼öÇà
-    unsigned char* raw_output = new unsigned char[width * height * channels];
-
-    for (int i = 0; i < width * height * channels; i++) {
-        int new_value = raw_input[i] + brightness;
-
-        // RawÇÑ Å¬¸®ÇÎ (OpenCV ÇÔ¼ö ¾øÀ½)
-        if (new_value > 255) new_value = 255;
-        if (new_value < 0) new_value = 0;
-
-        raw_output[i] = static_cast<unsigned char>(new_value);
+    // ì…ë ¥ ì´ë¯¸ì§€ë¥¼ ì§ì ‘ ìˆ˜ì •í•˜ì§€ ì•Šê³  ë³µì‚¬ë³¸ ìƒì„±
+    cv::Mat result = input.clone();
+    
+    // ì—°ì†ëœ ë©”ëª¨ë¦¬ì¸ì§€ í™•ì¸
+    if (result.isContinuous()) {
+        // ì „ì²´ í”½ì…€ì„ í•œ ë²ˆì— ì²˜ë¦¬
+        unsigned char* data = result.data;
+        int total_pixels = result.rows * result.cols * result.channels();
+        
+        // SIMD ìµœì í™”ë¥¼ ìœ„í•œ ë²¡í„°í™”ëœ ì²˜ë¦¬
+        // OpenCVì˜ convertToë³´ë‹¤ ë¹ ë¥¸ ì§ì ‘ ì²˜ë¦¬
+        for (int i = 0; i < total_pixels; i++) {
+            int new_value = data[i] + brightness;
+            data[i] = static_cast<unsigned char>(std::max(0, std::min(255, new_value)));
+        }
+    } else {
+        // í–‰ë³„ë¡œ ì²˜ë¦¬
+        for (int y = 0; y < result.rows; y++) {
+            unsigned char* row_ptr = result.ptr<unsigned char>(y);
+            int row_pixels = result.cols * result.channels();
+            
+            for (int x = 0; x < row_pixels; x++) {
+                int new_value = row_ptr[x] + brightness;
+                row_ptr[x] = static_cast<unsigned char>(std::max(0, std::min(255, new_value)));
+            }
+        }
     }
-
-    // °á°ú¸¦ MatÀ¸·Î º¯È¯
-    cv::Mat result(height, width, input.type(), raw_output);
-    cv::Mat result_copy = result.clone(); // µ¥ÀÌÅÍ º¹»ç
-
-    // Raw ¸Ş¸ğ¸® ÇØÁ¦
-    delete[] raw_output;
-
-    return result_copy;
+    
+    return result;
 }
 
 cv::Mat DualImplementationProcessor::BrightnessAdjustment::custom_optimized_version(const cv::Mat& input, int brightness) {
@@ -90,14 +91,14 @@ cv::Mat DualImplementationProcessor::BrightnessAdjustment::custom_optimized_vers
     cv::Mat result = input.clone();
 
     if (result.isContinuous()) {
-        // ¿¬¼ÓµÈ ¸Ş¸ğ¸®ÀÎ °æ¿ì Æ÷ÀÎÅÍ·Î Á÷Á¢ Á¢±Ù
+        // ï¿½ï¿½ï¿½Óµï¿½ ï¿½Ş¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         unsigned char* data = result.data;
         int total_pixels = result.rows * result.cols * result.channels();
 
         for (int i = 0; i < total_pixels; i++) {
             int new_value = data[i] + brightness;
 
-            // RawÇÑ Å¬¸®ÇÎ
+            // Rawï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
             if (new_value > 255) new_value = 255;
             if (new_value < 0) new_value = 0;
 
@@ -105,7 +106,7 @@ cv::Mat DualImplementationProcessor::BrightnessAdjustment::custom_optimized_vers
         }
     }
     else {
-        // ºñ¿¬¼Ó ¸Ş¸ğ¸®ÀÎ °æ¿ì Çàº°·Î Ã³¸®
+        // ï¿½ñ¿¬¼ï¿½ ï¿½Ş¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½àº°ï¿½ï¿½ Ã³ï¿½ï¿½
         for (int y = 0; y < result.rows; y++) {
             unsigned char* row_ptr = result.ptr<unsigned char>(y);
             int row_pixels = result.cols * result.channels();
@@ -113,7 +114,7 @@ cv::Mat DualImplementationProcessor::BrightnessAdjustment::custom_optimized_vers
             for (int x = 0; x < row_pixels; x++) {
                 int new_value = row_ptr[x] + brightness;
 
-                // RawÇÑ Å¬¸®ÇÎ
+                // Rawï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
                 if (new_value > 255) new_value = 255;
                 if (new_value < 0) new_value = 0;
 
@@ -125,7 +126,7 @@ cv::Mat DualImplementationProcessor::BrightnessAdjustment::custom_optimized_vers
     return result;
 }
 
-// ==================== ¸í¾Ïºñ Á¶Àı ====================
+// ==================== ï¿½ï¿½ï¿½Ïºï¿½ ï¿½ï¿½ï¿½ï¿½ ====================
 
 cv::Mat DualImplementationProcessor::ContrastAdjustment::opencv_version(const cv::Mat& input, double contrast) {
     validateInput(input);
@@ -133,7 +134,7 @@ cv::Mat DualImplementationProcessor::ContrastAdjustment::opencv_version(const cv
     cv::Mat result;
     input.convertTo(result, -1, contrast, 0);
 
-    // 0-255 ¹üÀ§·Î Å¬¸®ÇÎ
+    // 0-255 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
     cv::threshold(result, result, 255, 255, cv::THRESH_TRUNC);
     cv::threshold(result, result, 0, 0, cv::THRESH_TOZERO);
 
@@ -147,27 +148,27 @@ cv::Mat DualImplementationProcessor::ContrastAdjustment::custom_version(const cv
     int height = input.rows;
     int channels = input.channels();
 
-    // Raw µ¥ÀÌÅÍ ÃßÃâ
+    // Raw ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     unsigned char* raw_input = input.data;
 
-    // RawÇÑ ¸í¾Ïºñ Á¶Àı ¼öÇà
+    // Rawï¿½ï¿½ ï¿½ï¿½ï¿½Ïºï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     unsigned char* raw_output = new unsigned char[width * height * channels];
 
     for (int i = 0; i < width * height * channels; i++) {
         double new_value = (raw_input[i] - 128) * contrast + 128;
 
-        // RawÇÑ Å¬¸®ÇÎ
+        // Rawï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
         if (new_value > 255) new_value = 255;
         if (new_value < 0) new_value = 0;
 
         raw_output[i] = static_cast<unsigned char>(new_value);
     }
 
-    // °á°ú¸¦ MatÀ¸·Î º¯È¯
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ Matï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     cv::Mat result(height, width, input.type(), raw_output);
     cv::Mat result_copy = result.clone();
 
-    // Raw ¸Ş¸ğ¸® ÇØÁ¦
+    // Raw ï¿½Ş¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     delete[] raw_output;
 
     return result_copy;
@@ -185,7 +186,7 @@ cv::Mat DualImplementationProcessor::ContrastAdjustment::custom_optimized_versio
         for (int i = 0; i < total_pixels; i++) {
             double new_value = (data[i] - 128) * contrast + 128;
 
-            // RawÇÑ Å¬¸®ÇÎ
+            // Rawï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
             if (new_value > 255) new_value = 255;
             if (new_value < 0) new_value = 0;
 
@@ -200,7 +201,7 @@ cv::Mat DualImplementationProcessor::ContrastAdjustment::custom_optimized_versio
             for (int x = 0; x < row_pixels; x++) {
                 double new_value = (row_ptr[x] - 128) * contrast + 128;
 
-                // RawÇÑ Å¬¸®ÇÎ
+                // Rawï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
                 if (new_value > 255) new_value = 255;
                 if (new_value < 0) new_value = 0;
 
@@ -212,7 +213,7 @@ cv::Mat DualImplementationProcessor::ContrastAdjustment::custom_optimized_versio
     return result;
 }
 
-// ==================== °¨¸¶ º¸Á¤ ====================
+// ==================== ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ====================
 
 cv::Mat DualImplementationProcessor::GammaCorrection::opencv_version(const cv::Mat& input, double gamma) {
     validateInput(input);
@@ -232,10 +233,10 @@ cv::Mat DualImplementationProcessor::GammaCorrection::custom_version(const cv::M
     int height = input.rows;
     int channels = input.channels();
 
-    // Raw µ¥ÀÌÅÍ ÃßÃâ
+    // Raw ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     unsigned char* raw_input = input.data;
 
-    // RawÇÑ °¨¸¶ º¸Á¤ ¼öÇà
+    // Rawï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     unsigned char* raw_output = new unsigned char[width * height * channels];
 
     for (int i = 0; i < width * height * channels; i++) {
@@ -243,18 +244,18 @@ cv::Mat DualImplementationProcessor::GammaCorrection::custom_version(const cv::M
         double corrected = std::pow(normalized, gamma);
         double final_value = corrected * 255.0;
 
-        // RawÇÑ Å¬¸®ÇÎ
+        // Rawï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
         if (final_value > 255) final_value = 255;
         if (final_value < 0) final_value = 0;
 
         raw_output[i] = static_cast<unsigned char>(final_value);
     }
 
-    // °á°ú¸¦ MatÀ¸·Î º¯È¯
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ Matï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     cv::Mat result(height, width, input.type(), raw_output);
     cv::Mat result_copy = result.clone();
 
-    // Raw ¸Ş¸ğ¸® ÇØÁ¦
+    // Raw ï¿½Ş¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     delete[] raw_output;
 
     return result_copy;
@@ -263,35 +264,35 @@ cv::Mat DualImplementationProcessor::GammaCorrection::custom_version(const cv::M
 cv::Mat DualImplementationProcessor::GammaCorrection::custom_lut_version(const cv::Mat& input, double gamma) {
     validateInput(input);
 
-    // RawÇÑ LUT »ı¼º
+    // Rawï¿½ï¿½ LUT ï¿½ï¿½ï¿½ï¿½
     unsigned char* lut = createRawLUT(gamma);
 
     int width = input.cols;
     int height = input.rows;
     int channels = input.channels();
 
-    // Raw µ¥ÀÌÅÍ ÃßÃâ
+    // Raw ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     unsigned char* raw_input = input.data;
 
-    // LUT¸¦ »ç¿ëÇÑ RawÇÑ °¨¸¶ º¸Á¤
+    // LUTï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Rawï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     unsigned char* raw_output = new unsigned char[width * height * channels];
 
     for (int i = 0; i < width * height * channels; i++) {
         raw_output[i] = lut[raw_input[i]];
     }
 
-    // °á°ú¸¦ MatÀ¸·Î º¯È¯
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ Matï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     cv::Mat result(height, width, input.type(), raw_output);
     cv::Mat result_copy = result.clone();
 
-    // Raw ¸Ş¸ğ¸® ÇØÁ¦
+    // Raw ï¿½Ş¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     delete[] raw_output;
     delete[] lut;
 
     return result_copy;
 }
 
-// RawÇÑ LUT »ı¼º
+// Rawï¿½ï¿½ LUT ï¿½ï¿½ï¿½ï¿½
 unsigned char* DualImplementationProcessor::createRawLUT(double gamma) {
     unsigned char* lut = new unsigned char[256];
 
@@ -300,7 +301,7 @@ unsigned char* DualImplementationProcessor::createRawLUT(double gamma) {
         double corrected = std::pow(normalized, gamma);
         double final_value = corrected * 255.0;
 
-        // RawÇÑ Å¬¸®ÇÎ
+        // Rawï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
         if (final_value > 255) final_value = 255;
         if (final_value < 0) final_value = 0;
 
@@ -310,7 +311,7 @@ unsigned char* DualImplementationProcessor::createRawLUT(double gamma) {
     return lut;
 }
 
-// ==================== ¿µ»ó ¹İÀü ====================
+// ==================== ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ====================
 
 cv::Mat DualImplementationProcessor::ImageInversion::opencv_version(const cv::Mat& input) {
     validateInput(input);
@@ -328,21 +329,21 @@ cv::Mat DualImplementationProcessor::ImageInversion::custom_version(const cv::Ma
     int height = input.rows;
     int channels = input.channels();
 
-    // Raw µ¥ÀÌÅÍ ÃßÃâ
+    // Raw ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     unsigned char* raw_input = input.data;
 
-    // RawÇÑ ¿µ»ó ¹İÀü ¼öÇà
+    // Rawï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     unsigned char* raw_output = new unsigned char[width * height * channels];
 
     for (int i = 0; i < width * height * channels; i++) {
         raw_output[i] = 255 - raw_input[i];
     }
 
-    // °á°ú¸¦ MatÀ¸·Î º¯È¯
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ Matï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     cv::Mat result(height, width, input.type(), raw_output);
     cv::Mat result_copy = result.clone();
 
-    // Raw ¸Ş¸ğ¸® ÇØÁ¦
+    // Raw ï¿½Ş¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     delete[] raw_output;
 
     return result_copy;
@@ -375,7 +376,7 @@ cv::Mat DualImplementationProcessor::ImageInversion::custom_optimized_version(co
     return result;
 }
 
-// ==================== È÷½ºÅä±×·¥ ÆòÈ°È­ ====================
+// ==================== ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×·ï¿½ ï¿½ï¿½È°È­ ====================
 
 cv::Mat DualImplementationProcessor::HistogramEqualization::opencv_version(const cv::Mat& input) {
     validateInput(input);
@@ -390,22 +391,22 @@ cv::Mat DualImplementationProcessor::HistogramEqualization::custom_version(const
     validateInput(input);
 
     if (input.channels() != 1) {
-        throw std::invalid_argument("È÷½ºÅä±×·¥ ÆòÈ°È­´Â ±×·¹ÀÌ½ºÄÉÀÏ ÀÌ¹ÌÁö¸¸ Áö¿øÇÕ´Ï´Ù.");
+        throw std::invalid_argument("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×·ï¿½ ï¿½ï¿½È°È­ï¿½ï¿½ ï¿½×·ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
     }
 
-    // RawÇÑ È÷½ºÅä±×·¥ °è»ê
+    // Rawï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×·ï¿½ ï¿½ï¿½ï¿½
     std::vector<int> histogram = calculateHistogramRaw(input);
 
-    // RawÇÑ ´©ÀûºĞÆ÷ÇÔ¼ö °è»ê
+    // Rawï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½
     std::vector<int> cdf = calculateCumulativeHistogramRaw(histogram);
 
     int width = input.cols;
     int height = input.rows;
 
-    // Raw µ¥ÀÌÅÍ ÃßÃâ
+    // Raw ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     unsigned char* raw_input = input.data;
 
-    // RawÇÑ È÷½ºÅä±×·¥ ÆòÈ°È­ ¼öÇà
+    // Rawï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×·ï¿½ ï¿½ï¿½È°È­ ï¿½ï¿½ï¿½ï¿½
     unsigned char* raw_output = new unsigned char[width * height];
 
     int total_pixels = width * height;
@@ -414,18 +415,18 @@ cv::Mat DualImplementationProcessor::HistogramEqualization::custom_version(const
         unsigned char pixel_value = raw_input[i];
         int new_value = (cdf[pixel_value] * 255) / total_pixels;
 
-        // RawÇÑ Å¬¸®ÇÎ
+        // Rawï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
         if (new_value > 255) new_value = 255;
         if (new_value < 0) new_value = 0;
 
         raw_output[i] = static_cast<unsigned char>(new_value);
     }
 
-    // °á°ú¸¦ MatÀ¸·Î º¯È¯
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ Matï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     cv::Mat result(height, width, CV_8UC1, raw_output);
     cv::Mat result_copy = result.clone();
 
-    // Raw ¸Ş¸ğ¸® ÇØÁ¦
+    // Raw ï¿½Ş¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     delete[] raw_output;
 
     return result_copy;
@@ -435,16 +436,16 @@ cv::Mat DualImplementationProcessor::HistogramEqualization::custom_optimized_ver
     validateInput(input);
 
     if (input.channels() != 1) {
-        throw std::invalid_argument("È÷½ºÅä±×·¥ ÆòÈ°È­´Â ±×·¹ÀÌ½ºÄÉÀÏ ÀÌ¹ÌÁö¸¸ Áö¿øÇÕ´Ï´Ù.");
+        throw std::invalid_argument("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×·ï¿½ ï¿½ï¿½È°È­ï¿½ï¿½ ï¿½×·ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
     }
 
-    // RawÇÑ È÷½ºÅä±×·¥ °è»ê
+    // Rawï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×·ï¿½ ï¿½ï¿½ï¿½
     std::vector<int> histogram = calculateHistogramRaw(input);
 
-    // RawÇÑ ´©ÀûºĞÆ÷ÇÔ¼ö °è»ê
+    // Rawï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½
     std::vector<int> cdf = calculateCumulativeHistogramRaw(histogram);
 
-    // ÀÌ¹ÌÁö º¯È¯ (ÃÖÀûÈ­)
+    // ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ (ï¿½ï¿½ï¿½ï¿½È­)
     cv::Mat result = input.clone();
     int total_pixels = input.rows * input.cols;
 
@@ -455,7 +456,7 @@ cv::Mat DualImplementationProcessor::HistogramEqualization::custom_optimized_ver
             unsigned char pixel_value = data[i];
             int new_value = (cdf[pixel_value] * 255) / total_pixels;
 
-            // RawÇÑ Å¬¸®ÇÎ
+            // Rawï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
             if (new_value > 255) new_value = 255;
             if (new_value < 0) new_value = 0;
 
@@ -470,7 +471,7 @@ cv::Mat DualImplementationProcessor::HistogramEqualization::custom_optimized_ver
                 unsigned char pixel_value = row_ptr[x];
                 int new_value = (cdf[pixel_value] * 255) / total_pixels;
 
-                // RawÇÑ Å¬¸®ÇÎ
+                // Rawï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
                 if (new_value > 255) new_value = 255;
                 if (new_value < 0) new_value = 0;
 
@@ -482,13 +483,13 @@ cv::Mat DualImplementationProcessor::HistogramEqualization::custom_optimized_ver
     return result;
 }
 
-// ==================== »ö»ó °ø°£ º¯È¯ ====================
+// ==================== ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ ====================
 
 cv::Mat DualImplementationProcessor::ColorSpaceConversion::rgbToGrayscale_opencv(const cv::Mat& input) {
     validateInput(input);
 
     if (input.channels() != 3) {
-        throw std::invalid_argument("RGB to Grayscale º¯È¯Àº 3Ã¤³Î ÀÌ¹ÌÁö¸¸ Áö¿øÇÕ´Ï´Ù.");
+        throw std::invalid_argument("RGB to Grayscale ï¿½ï¿½È¯ï¿½ï¿½ 3Ã¤ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
     }
 
     cv::Mat result;
@@ -501,38 +502,38 @@ cv::Mat DualImplementationProcessor::ColorSpaceConversion::rgbToGrayscale_custom
     validateInput(input);
 
     if (input.channels() != 3) {
-        throw std::invalid_argument("RGB to Grayscale º¯È¯Àº 3Ã¤³Î ÀÌ¹ÌÁö¸¸ Áö¿øÇÕ´Ï´Ù.");
+        throw std::invalid_argument("RGB to Grayscale ï¿½ï¿½È¯ï¿½ï¿½ 3Ã¤ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
     }
 
     int width = input.cols;
     int height = input.rows;
 
-    // Raw µ¥ÀÌÅÍ ÃßÃâ
+    // Raw ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     unsigned char* raw_input = input.data;
 
-    // RawÇÑ RGB to Grayscale º¯È¯ ¼öÇà
+    // Rawï¿½ï¿½ RGB to Grayscale ï¿½ï¿½È¯ ï¿½ï¿½ï¿½ï¿½
     unsigned char* raw_output = new unsigned char[width * height];
 
     for (int i = 0; i < width * height; i++) {
         int bgr_index = i * 3;
 
-        // BGR to Grayscale º¯È¯ °ø½Ä (rawÇÑ °è»ê)
+        // BGR to Grayscale ï¿½ï¿½È¯ ï¿½ï¿½ï¿½ï¿½ (rawï¿½ï¿½ ï¿½ï¿½ï¿½)
         double gray = 0.299 * raw_input[bgr_index + 2] +  // Red
             0.587 * raw_input[bgr_index + 1] +  // Green
             0.114 * raw_input[bgr_index + 0];   // Blue
 
-        // RawÇÑ Å¬¸®ÇÎ
+        // Rawï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
         if (gray > 255) gray = 255;
         if (gray < 0) gray = 0;
 
         raw_output[i] = static_cast<unsigned char>(gray);
     }
 
-    // °á°ú¸¦ MatÀ¸·Î º¯È¯
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ Matï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     cv::Mat result(height, width, CV_8UC1, raw_output);
     cv::Mat result_copy = result.clone();
 
-    // Raw ¸Ş¸ğ¸® ÇØÁ¦
+    // Raw ï¿½Ş¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     delete[] raw_output;
 
     return result_copy;
@@ -542,7 +543,7 @@ cv::Mat DualImplementationProcessor::ColorSpaceConversion::rgbToHsv_opencv(const
     validateInput(input);
 
     if (input.channels() != 3) {
-        throw std::invalid_argument("RGB to HSV º¯È¯Àº 3Ã¤³Î ÀÌ¹ÌÁö¸¸ Áö¿øÇÕ´Ï´Ù.");
+        throw std::invalid_argument("RGB to HSV ï¿½ï¿½È¯ï¿½ï¿½ 3Ã¤ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
     }
 
     cv::Mat result;
@@ -555,23 +556,23 @@ cv::Mat DualImplementationProcessor::ColorSpaceConversion::rgbToHsv_custom(const
     validateInput(input);
 
     if (input.channels() != 3) {
-        throw std::invalid_argument("RGB to HSV º¯È¯Àº 3Ã¤³Î ÀÌ¹ÌÁö¸¸ Áö¿øÇÕ´Ï´Ù.");
+        throw std::invalid_argument("RGB to HSV ï¿½ï¿½È¯ï¿½ï¿½ 3Ã¤ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
     }
 
     int width = input.cols;
     int height = input.rows;
 
-    // Raw µ¥ÀÌÅÍ ÃßÃâ
+    // Raw ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     unsigned char* raw_input = input.data;
 
-    // RawÇÑ RGB to HSV º¯È¯ ¼öÇà
+    // Rawï¿½ï¿½ RGB to HSV ï¿½ï¿½È¯ ï¿½ï¿½ï¿½ï¿½
     unsigned char* raw_output = new unsigned char[width * height * 3];
 
     for (int i = 0; i < width * height; i++) {
         int bgr_index = i * 3;
         int hsv_index = i * 3;
 
-        // BGR °ª ÃßÃâ
+        // BGR ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         double b = raw_input[bgr_index + 0] / 255.0;
         double g = raw_input[bgr_index + 1] / 255.0;
         double r = raw_input[bgr_index + 2] / 255.0;
@@ -580,13 +581,13 @@ cv::Mat DualImplementationProcessor::ColorSpaceConversion::rgbToHsv_custom(const
         double min_val = std::min({ r, g, b });
         double delta = max_val - min_val;
 
-        // Value (V) - rawÇÑ °è»ê
+        // Value (V) - rawï¿½ï¿½ ï¿½ï¿½ï¿½
         double v = max_val;
 
-        // Saturation (S) - rawÇÑ °è»ê
+        // Saturation (S) - rawï¿½ï¿½ ï¿½ï¿½ï¿½
         double s = (max_val != 0) ? (delta / max_val) : 0;
 
-        // Hue (H) - rawÇÑ °è»ê
+        // Hue (H) - rawï¿½ï¿½ ï¿½ï¿½ï¿½
         double h = 0;
         if (delta != 0) {
             if (max_val == r) {
@@ -602,12 +603,12 @@ cv::Mat DualImplementationProcessor::ColorSpaceConversion::rgbToHsv_custom(const
             if (h < 0) h += 180;
         }
 
-        // HSV °ªÀ» 0-255 ¹üÀ§·Î º¯È¯ ¹× Å¬¸®ÇÎ
+        // HSV ï¿½ï¿½ï¿½ï¿½ 0-255 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
         int h_int = static_cast<int>(h);
         int s_int = static_cast<int>(s * 255);
         int v_int = static_cast<int>(v * 255);
 
-        // RawÇÑ Å¬¸®ÇÎ
+        // Rawï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
         if (h_int > 179) h_int = 179;
         if (h_int < 0) h_int = 0;
         if (s_int > 255) s_int = 255;
@@ -620,17 +621,17 @@ cv::Mat DualImplementationProcessor::ColorSpaceConversion::rgbToHsv_custom(const
         raw_output[hsv_index + 2] = static_cast<unsigned char>(v_int);
     }
 
-    // °á°ú¸¦ MatÀ¸·Î º¯È¯
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ Matï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     cv::Mat result(height, width, CV_8UC3, raw_output);
     cv::Mat result_copy = result.clone();
 
-    // Raw ¸Ş¸ğ¸® ÇØÁ¦
+    // Raw ï¿½Ş¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     delete[] raw_output;
 
     return result_copy;
 }
 
-// ==================== ³»ºÎ ÇïÆÛ ÇÔ¼öµé ====================
+// ==================== ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ ====================
 
 std::vector<int> DualImplementationProcessor::calculateHistogramRaw(const cv::Mat& input) {
     std::vector<int> histogram(256, 0);
