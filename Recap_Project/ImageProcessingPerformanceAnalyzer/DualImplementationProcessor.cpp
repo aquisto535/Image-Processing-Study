@@ -1,4 +1,4 @@
-#include "DualImplementationProcessor.h"
+﻿#include "DualImplementationProcessor.h"
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/core.hpp>
@@ -36,7 +36,7 @@ void DualImplementationProcessor::copyRawToMat(const unsigned char* raw_data, cv
     memcpy(output.data, raw_data, total_pixels);
 }
 
-// ==================== ��� ���� ====================
+// ========================================
 
 cv::Mat DualImplementationProcessor::BrightnessAdjustment::opencv_version(const cv::Mat& input, int brightness) {
     validateInput(input);

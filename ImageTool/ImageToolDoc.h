@@ -1,5 +1,5 @@
-ï»¿
-// ImageToolDoc.h: CImageToolDoc í´ë˜ìŠ¤ì˜ ì¸í„°í˜ì´ìŠ¤
+
+// ImageToolDoc.h: CImageToolDoc Å¬·¡½ºÀÇ ÀÎÅÍÆäÀÌ½º
 //
 
 
@@ -8,17 +8,17 @@
 
 class CImageToolDoc : public CDocument
 {
-protected: // serializationì—ì„œë§Œ ë§Œë“¤ì–´ì§‘ë‹ˆë‹¤.
+protected: // serialization¿¡¼­¸¸ ¸¸µé¾îÁı´Ï´Ù.
 	CImageToolDoc() noexcept;
 	DECLARE_DYNCREATE(CImageToolDoc)
 
-// íŠ¹ì„±ì…ë‹ˆë‹¤.
+// Æ¯¼ºÀÔ´Ï´Ù.
 public:
 
-// ì‘ì—…ì…ë‹ˆë‹¤.
+// ÀÛ¾÷ÀÔ´Ï´Ù.
 public:
 
-// ì¬ì •ì˜ì…ë‹ˆë‹¤.
+// ÀçÁ¤ÀÇÀÔ´Ï´Ù.
 public:
 	virtual BOOL OnNewDocument();
 	virtual void Serialize(CArchive& ar);
@@ -27,7 +27,7 @@ public:
 	virtual void OnDrawThumbnail(CDC& dc, LPRECT lprcBounds);
 #endif // SHARED_HANDLERS
 
-// êµ¬í˜„ì…ë‹ˆë‹¤.
+// ±¸ÇöÀÔ´Ï´Ù.
 public:
 	virtual ~CImageToolDoc();
 #ifdef _DEBUG
@@ -37,16 +37,16 @@ public:
 
 protected:
 
-// ìƒì„±ëœ ë©”ì‹œì§€ ë§µ í•¨ìˆ˜
+// »ı¼ºµÈ ¸Ş½ÃÁö ¸Ê ÇÔ¼ö
 protected:
 	DECLARE_MESSAGE_MAP()
 
 #ifdef SHARED_HANDLERS
-	// ê²€ìƒ‰ ì²˜ë¦¬ê¸°ì— ëŒ€í•œ ê²€ìƒ‰ ì½˜í…ì¸ ë¥¼ ì„¤ì •í•˜ëŠ” ë„ìš°ë¯¸ í•¨ìˆ˜
+	// °Ë»ö Ã³¸®±â¿¡ ´ëÇÑ °Ë»ö ÄÜÅÙÃ÷¸¦ ¼³Á¤ÇÏ´Â µµ¿ì¹Ì ÇÔ¼ö
 	void SetSearchContent(const CString& value);
 #endif // SHARED_HANDLERS
 public:
-	// ë¹„íŠ¸ë§µ ê°ì²´
+	// ºñÆ®¸Ê °´Ã¼
 	IppDib m_Dib;
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
 	virtual BOOL OnSaveDocument(LPCTSTR lpszPathName);
@@ -62,6 +62,9 @@ public:
 	afx_msg void OnHistoEqualization();
 	afx_msg void OnArithmeticLogical();
 	afx_msg void OnBitplaneSlicing();
+	afx_msg void OnFilterMean();
+	afx_msg void OnFilterWeightedMean();
+	afx_msg void OnFilterGaussian();
 };
 
 

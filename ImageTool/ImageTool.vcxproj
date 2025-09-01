@@ -165,6 +165,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>./IppImage</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -187,12 +188,14 @@
     <ClInclude Include="CBrightnessContrastDlg.h" />
     <ClInclude Include="CFileNewDlg.h" />
     <ClInclude Include="CGammaCorrectionDlg.h" />
+    <ClInclude Include="CGaussianDlg.h" />
     <ClInclude Include="ChildFrm.h" />
     <ClInclude Include="CHistogramDlg.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ImageTool.h" />
     <ClInclude Include="ImageToolDoc.h" />
     <ClInclude Include="ImageToolView.h" />
+    <ClInclude Include="IppFilter.h" />
     <ClInclude Include="IppImage\IppConvert.h" />
     <ClInclude Include="IppImage\IppDib.h" />
     <ClInclude Include="IppImage\IppEnhance.h" />
@@ -209,11 +212,13 @@
     <ClCompile Include="CBrightnessContrastDlg.cpp" />
     <ClCompile Include="CFileNewDlg.cpp" />
     <ClCompile Include="CGammaCorrectionDlg.cpp" />
+    <ClCompile Include="CGaussianDlg.cpp" />
     <ClCompile Include="ChildFrm.cpp" />
     <ClCompile Include="CHistogramDlg.cpp" />
     <ClCompile Include="ImageTool.cpp" />
     <ClCompile Include="ImageToolDoc.cpp" />
     <ClCompile Include="ImageToolView.cpp" />
+    <ClCompile Include="IppFilter.cpp" />
     <ClCompile Include="IppImage\IppConvert.cpp" />
     <ClCompile Include="IppImage\IppDib.cpp" />
     <ClCompile Include="IppImage\IppEnhance.cpp" />

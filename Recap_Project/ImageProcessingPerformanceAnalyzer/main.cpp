@@ -62,13 +62,13 @@ void runBasicPerformanceComparison()
             return DualImplementationProcessor::BrightnessAdjustment::custom_version(img, brightness);
             };
 
-        auto result = analyzer.runComparison("Brightness_Adjustment", opencv_func, custom_func, testImage, 100);
+		auto result = analyzer.runComparison("Brightness_Adjustment", opencv_func, custom_func, testImage, 100); // 각 함수를 100회씩 실행한 결과를 반환
 
         cout << "   밝기 조절 결과:" << endl;
         cout << "   OpenCV: " << fixed << setprecision(2) << result.opencvTime << " ms" << endl;
         cout << "   Custom: " << result.customTime << " ms" << endl;
         cout << "   성능 비율: " << result.speedupRatio << "x" << endl;
-        cout << "   정확도: " << result.accuracy << "%" << endl;
+        cout << "   정확도 차이: " << result.accuracy << "% (Custom - OpenCV)" << endl;
     }
 
     // 감마 보정 비교
@@ -87,6 +87,6 @@ void runBasicPerformanceComparison()
         cout << "   OpenCV: " << result.opencvTime << " ms" << endl;
         cout << "   Custom: " << result.customTime << " ms" << endl;
         cout << "   성능 비율: " << result.speedupRatio << "x" << endl;
-        cout << "   정확도: " << result.accuracy << "%" << endl;
+        cout << "   정확도 차이: " << result.accuracy << "% (Custom - OpenCV)" << endl;
     }
 }

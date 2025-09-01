@@ -7,15 +7,15 @@
 using namespace cv;
 using namespace std;
 
-// 결과 정확도 비교 (다중 지표)
+// 결과 정확도 비교 (다중 지표) - 원본 이미지와 결과 이미지 비교
 PerformanceAnalyzer::AccuracyMetrics PerformanceAnalyzer::compareResults(
-    const Mat& opencv_result, const Mat& custom_result) {
+    const Mat& original_image, const Mat& result_image) {
 
     AccuracyMetrics metrics;
 
     // 1. MSE (Mean Squared Error) 계산
     Mat diff;
-    absdiff(opencv_result, custom_result, diff);
+    absdiff(original_image, result_image, diff);
     diff.convertTo(diff, CV_32F);
 
     Scalar mse_scalar = mean(diff.mul(diff));
@@ -30,29 +30,29 @@ PerformanceAnalyzer::AccuracyMetrics PerformanceAnalyzer::compareResults(
     }
 
     // 3. SSIM (Structural Similarity Index) 계산
-    metrics.ssim = calculateSSIM(opencv_result, custom_result);
+    metrics.ssim = calculateSSIM(original_image, result_image);
 
     // 4. 히스토그램 유사도 (그레이스케일인 경우)
-    if (opencv_result.channels() == 1) {
-        vector<Mat> opencv_imgs = { opencv_result };
-        vector<Mat> custom_imgs = { custom_result };
+    if (original_image.channels() == 1) {
+        vector<Mat> original_imgs = { original_image };
+        vector<Mat> result_imgs = { result_image };
 
-        Mat opencv_hist, custom_hist;
+        Mat original_hist, result_hist;
         int histSize = 256;
         float range[] = { 0, 256 };
         const float* histRange = { range };
 
         int channels[] = { 0 }; // 채널도 명시적인 배열로 전달하는 것이 더 안전합니다.
 
-        calcHist(&opencv_imgs[0], 1, channels, Mat(), opencv_hist, 1, &histSize, &histRange);
-        calcHist(&custom_imgs[0], 1, channels, Mat(), custom_hist, 1, &histSize, &histRange);
+        calcHist(&original_imgs[0], 1, channels, Mat(), original_hist, 1, &histSize, &histRange);
+        calcHist(&result_imgs[0], 1, channels, Mat(), result_hist, 1, &histSize, &histRange);
 
         // 정규화
-        normalize(opencv_hist, opencv_hist, 0, 1, NORM_MINMAX, -1, Mat());
-        normalize(custom_hist, custom_hist, 0, 1, NORM_MINMAX, -1, Mat());
+        normalize(original_hist, original_hist, 0, 1, NORM_MINMAX, -1, Mat());
+        normalize(result_hist, result_hist, 0, 1, NORM_MINMAX, -1, Mat());
 
         // 상관계수 계산
-        metrics.histogram_similarity = compareHist(opencv_hist, custom_hist, HISTCMP_CORREL) * 100.0;
+        metrics.histogram_similarity = compareHist(original_hist, result_hist, HISTCMP_CORREL) * 100.0;
     }
     else {
         metrics.histogram_similarity = 100.0;  // 컬러 이미지는 100%로 가정
@@ -120,13 +120,22 @@ BenchmarkResult PerformanceAnalyzer::runComparison(
     // 성능 비율 계산
     result.speedupRatio = result.customTime / result.opencvTime;
 
-    // 정확도 분석
-    auto accuracy_metrics = compareResults(opencv_result, custom_result);
+    // 정확도 분석 - 원본 이미지와 각각의 결과 비교
+    auto opencv_accuracy = compareResults(input_image, opencv_result);
+    auto custom_accuracy = compareResults(input_image, custom_result);
 
-    // 종합 정확도 점수 (가중 평균)
-    result.accuracy = (accuracy_metrics.ssim * 100 * 0.4) +      // SSIM 40%
-        (min(accuracy_metrics.psnr / 40.0, 1.0) * 100 * 0.3) +  // PSNR 30%
-        (accuracy_metrics.histogram_similarity * 0.3);            // Histogram 30%
+    // OpenCV 정확도 점수 (가중 평균)
+    double opencv_score = (opencv_accuracy.ssim * 100 * 0.4) +      // SSIM 40%
+        (min(opencv_accuracy.psnr / 40.0, 1.0) * 100 * 0.3) +      // PSNR 30%
+        (opencv_accuracy.histogram_similarity * 0.3);               // Histogram 30%
+
+    // Custom 정확도 점수 (가중 평균)
+    double custom_score = (custom_accuracy.ssim * 100 * 0.4) +      // SSIM 40%
+        (min(custom_accuracy.psnr / 40.0, 1.0) * 100 * 0.3) +      // PSNR 30%
+        (custom_accuracy.histogram_similarity * 0.3);               // Histogram 30%
+
+    // 정확도 차이 (Custom이 OpenCV보다 얼마나 정확한지)
+    result.accuracy = custom_score - opencv_score;
 
     // 메모리 사용량 측정 (단순화)
     result.memoryUsage = input_image.total() * input_image.elemSize();

@@ -10,38 +10,38 @@
 
 /**
  * @struct BenchmarkResult
- * @brief ´ÜÀÏ ¾Ë°í¸®ÁòÀÇ º¥Ä¡¸¶Å© °á°ú¸¦ ÀúÀåÇÏ´Â ±¸Á¶Ã¼ÀÔ´Ï´Ù.
+ * @brief ï¿½ï¿½ï¿½ï¿½ ï¿½Ë°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½Ô´Ï´ï¿½.
  */
 struct BenchmarkResult {
-    std::string algorithmName; // ¾Ë°í¸®Áò ÀÌ¸§
-    long imageSize;            // Ã³¸®µÈ ÀÌ¹ÌÁö Å©±â (ÇÈ¼¿ ¼ö)
-    std::string imageType;     // ÀÌ¹ÌÁö Å¸ÀÔ (e.g., "grayscale", "color")
-    double opencvTime;         // OpenCV ÇÔ¼ö ½ÇÇà ½Ã°£ (ms)
-    double customTime;         // Á÷Á¢ ±¸ÇöÇÑ ÇÔ¼ö ½ÇÇà ½Ã°£ (ms)
-    double speedupRatio;       // ¼º´É Çâ»ó ºñÀ² (OpenCV ´ëºñ)
-    double accuracy;           // Á¤È®µµ Á¡¼ö (%)
-    size_t memoryUsage;        // ¸Þ¸ð¸® »ç¿ë·® (bytes)
+    std::string algorithmName; // ï¿½Ë°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½
+    long imageSize;            // Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ (ï¿½È¼ï¿½ ï¿½ï¿½)
+    std::string imageType;     // ï¿½Ì¹ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ (e.g., "grayscale", "color")
+    double opencvTime;         // OpenCV ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ (ms)
+    double customTime;         // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ (ms)
+    double speedupRatio;       // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (OpenCV ï¿½ï¿½ï¿½)
+    double accuracy;           // ï¿½ï¿½È®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (%)
+    size_t memoryUsage;        // ï¿½Þ¸ï¿½ ï¿½ï¿½ë·® (bytes)
 };
 
 /**
  * @class PerformanceAnalyzer
- * @brief ¿µ»ó Ã³¸® ¾Ë°í¸®ÁòÀÇ ¼º´ÉÀ» ÃøÁ¤ÇÏ°í ºÐ¼®ÇÏ´Â Å¬·¡½ºÀÔ´Ï´Ù.
+ * @brief ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ ï¿½Ë°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ð¼ï¿½ï¿½Ï´ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.
  */
 class PerformanceAnalyzer {
 public:
     /**
-     * @brief »ý¼ºÀÚ
+     * @brief ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      */
     PerformanceAnalyzer() = default;
 
     /**
-     * @brief OpenCV ±¸Çö°ú Custom ±¸ÇöÀÇ ¼º´ÉÀ» ºñ±³ ºÐ¼®ÇÕ´Ï´Ù.
-     * @param algorithm_name ºÐ¼®ÇÒ ¾Ë°í¸®ÁòÀÇ ÀÌ¸§
-     * @param opencv_func OpenCV ±â¹Ý ÇÔ¼ö
-     * @param custom_func Á÷Á¢ ±¸ÇöÇÑ ÇÔ¼ö
-     * @param input_image Å×½ºÆ®¿¡ »ç¿ëÇÒ ÀÔ·Â ÀÌ¹ÌÁö
-     * @param iterations ¹Ýº¹ ÃøÁ¤ È½¼ö
-     * @return º¥Ä¡¸¶Å© °á°ú°¡ ´ã±ä BenchmarkResult °´Ã¼
+     * @brief OpenCV ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Custom ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ð¼ï¿½ï¿½Õ´Ï´ï¿½.
+     * @param algorithm_name ï¿½Ð¼ï¿½ï¿½ï¿½ ï¿½Ë°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½
+     * @param opencv_func OpenCV ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+     * @param custom_func ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+     * @param input_image ï¿½×½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½
+     * @param iterations ï¿½Ýºï¿½ ï¿½ï¿½ï¿½ï¿½ È½ï¿½ï¿½
+     * @return ï¿½ï¿½Ä¡ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ BenchmarkResult ï¿½ï¿½Ã¼
      */
     BenchmarkResult runComparison(
         const std::string& algorithm_name,
@@ -51,30 +51,31 @@ public:
         int iterations = 100);
 
     /**
-     * @brief Áö±Ý±îÁöÀÇ ºÐ¼® °á°ú¸¦ XML ÆÄÀÏ·Î ÀúÀåÇÕ´Ï´Ù.
-     * @param output_file ÀúÀåÇÒ ÆÄÀÏ °æ·Î
+     * @brief ï¿½ï¿½ï¿½Ý±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ XML ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
+     * @param output_file ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
      */
     void generateReport(const std::string& output_file);
 
     /**
-     * @brief ÀúÀåµÈ ¸ðµç º¥Ä¡¸¶Å© °á°ú¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù.
-     * @return BenchmarkResult º¤ÅÍ¿¡ ´ëÇÑ const ÂüÁ¶
+     * @brief ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Õ´Ï´ï¿½.
+     * @return BenchmarkResult ï¿½ï¿½ï¿½Í¿ï¿½ ï¿½ï¿½ï¿½ï¿½ const ï¿½ï¿½ï¿½ï¿½
      */
     const std::vector<BenchmarkResult>& getResults() const;
 
     /**
-     * @brief Æ¯Á¤ ÇÔ¼öÀÇ ½ÇÇà ½Ã°£À» ÃøÁ¤ÇÕ´Ï´Ù.
-     * @tparam Func ÃøÁ¤ÇÒ ÇÔ¼öÀÇ Å¸ÀÔ (º¸Åë ¶÷´Ù ÇÔ¼ö)
-     * @param func ÃøÁ¤ÇÒ ÇÔ¼ö °´Ã¼
-     * @param iterations ¹Ýº¹ ÃøÁ¤ È½¼ö
-     * @return Æò±Õ ½ÇÇà ½Ã°£ (ms)
+     * @brief Æ¯ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
+     * @tparam Func ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½)
+     * @param func ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½Ã¼
+     * @param iterations ï¿½Ýºï¿½ ï¿½ï¿½ï¿½ï¿½ È½ï¿½ï¿½
+     * @return ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ (ms)
      */
     template<typename Func>
-    double measureExecutionTime(Func func, int iterations) {
-        // Ã¹ ½ÇÇàÀº JIT ÄÄÆÄÀÏ µî ÁØºñ ½Ã°£À¸·Î ÀÎÇØ ¿Ö°îµÉ ¼ö ÀÖÀ¸¹Ç·Î ¿ú¾÷(warm-up) ½ÇÇà
-        func();
+    double measureExecutionTime(Func func, int iterations)
+    {
+        // Ã¹ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ JIT ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Øºï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö°ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ ï¿½ï¿½ï¿½ï¿½(warm-up) ï¿½ï¿½ï¿½ï¿½
+		func(); //Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ OpenCV ï¿½Ô¼ï¿½ ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-        auto start = std::chrono::high_resolution_clock::now();
+		auto start = std::chrono::high_resolution_clock::now(); //high_resolution_clockï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ø»ï¿½ï¿½ï¿½ ï¿½Ã°è¸¦ ï¿½ï¿½ï¿½ï¿½
         for (int i = 0; i < iterations; ++i) {
             func();
         }
@@ -87,31 +88,31 @@ public:
 private:
     /**
      * @struct AccuracyMetrics
-     * @brief µÎ °á°ú ÀÌ¹ÌÁö °£ÀÇ Á¤È®µµ¸¦ ´Ù¹æ¸éÀ¸·Î ÃøÁ¤ÇÏ±â À§ÇÑ ³»ºÎ ±¸Á¶Ã¼
+     * @brief ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È®ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¼
      */
     struct AccuracyMetrics {
         double mse = 0.0;                 // Mean Squared Error
         double psnr = 0.0;                // Peak Signal-to-Noise Ratio
         double ssim = 0.0;                // Structural Similarity Index
-        double histogram_similarity = 0.0; // È÷½ºÅä±×·¥ À¯»çµµ
+        double histogram_similarity = 0.0; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×·ï¿½ ï¿½ï¿½ï¿½çµµ
     };
 
     /**
-     * @brief µÎ ÀÌ¹ÌÁöÀÇ Á¤È®µµ¸¦ ºñ±³ÇÏ¿© AccuracyMetrics¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù.
+     * @brief ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¿ï¿½ AccuracyMetricsï¿½ï¿½ ï¿½ï¿½È¯ï¿½Õ´Ï´ï¿½.
      */
-    AccuracyMetrics compareResults(const cv::Mat& opencv_result, const cv::Mat& custom_result);
+    AccuracyMetrics compareResults(const cv::Mat& original_image, const cv::Mat& result_image);
 
     /**
-     * @brief µÎ ÀÌ¹ÌÁöÀÇ SSIM °ªÀ» °è»êÇÕ´Ï´Ù.
+     * @brief ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ SSIM ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
      */
     double calculateSSIM(const cv::Mat& img1, const cv::Mat& img2);
 
     /**
-     * @brief ÇöÀç ³¯Â¥¿Í ½Ã°£ ¹®ÀÚ¿­À» ¹ÝÈ¯ÇÕ´Ï´Ù.
+     * @brief ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Õ´Ï´ï¿½.
      */
     std::string getCurrentDateTime();
 
-    // ¸ðµç º¥Ä¡¸¶Å© °á°ú¸¦ ÀúÀåÇÏ´Â º¤ÅÍ
+    // ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
     std::vector<BenchmarkResult> results;
 };
 
