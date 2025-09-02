@@ -1,5 +1,11 @@
-#include "pch.h"
+Ôªø#include "pch.h"
 #include "IppFilter.h"
+
+#include <math.h>
+#include <time.h>
+#include <stdlib.h>
+#include <random>
+#include <algorithm>
 
 const float  PI_F = 3.14159265358979323846f;
 
@@ -8,7 +14,7 @@ void IppFilterMean(IppByteImage& imgSrc, IppByteImage& imgDst)
 	int w = imgSrc.GetWidth();
 	int h = imgSrc.GetHeight();
 
-	imgDst = imgSrc; // ≈©±‚øÕ √§≥Œ ºˆ∏¶ ∞∞∞‘ «‘
+	imgDst = imgSrc; // ÌÅ¨Í∏∞ÏôÄ Ï±ÑÎÑê ÏàòÎ•º Í∞ôÍ≤å Ìï®
 
 	BYTE** pSrc = imgSrc.GetPixels2D();
 	BYTE** pDst = imgDst.GetPixels2D();
@@ -20,7 +26,7 @@ void IppFilterMean(IppByteImage& imgSrc, IppByteImage& imgDst)
 	};
 
 	int i, j, m, n, sum;
-	for (j = 1; j < h - 1; j++) // ∞°¿Â¿⁄∏Æ «»ºø¿∫ √≥∏Æ«œ¡ˆ æ ¿Ω(∏∂Ω∫≈© ø¨ªÍ¿ª ¿ß«ÿ ¿¸√º 4¡ﬂ ∑Á«¡ ªÁøÎ)
+	for (j = 1; j < h - 1; j++) // Í∞ÄÏû•ÏûêÎ¶¨ ÌîΩÏÖÄÏùÄ Ï≤òÎ¶¨ÌïòÏßÄ ÏïäÏùå(ÎßàÏä§ÌÅ¨ Ïó∞ÏÇ∞ÏùÑ ÏúÑÌï¥ Ï†ÑÏ≤¥ 4Ï§ë Î£®ÌîÑ ÏÇ¨Ïö©)
 		for (i = 1; i < w - 1; i++) 
 		{
 			sum = 0;
@@ -78,7 +84,7 @@ void IppFilterGaussian(IppByteImage& imgSrc, IppFloatImage& imgDst, float sigma)
 	float** pDst = imgDst.GetPixels2D();
 
 	//-------------------------------------------------------------------------
-	// 1¬˜ø¯ ∞°øÏΩ√æ» ∏∂Ω∫≈© & Ω«ºˆ ø¨ªÍ¿ª ¿ß«— πˆ∆€ ¿ÃπÃ¡ˆ ª˝º∫
+	// 1Ï∞®Ïõê Í∞ÄÏö∞ÏãúÏïà ÎßàÏä§ÌÅ¨ & Ïã§Ïàò Ïó∞ÏÇ∞ÏùÑ ÏúÑÌïú Î≤ÑÌçº Ïù¥ÎØ∏ÏßÄ ÏÉùÏÑ±
 	//-------------------------------------------------------------------------
 
 	int dim = static_cast<int>(2 * 4 * sigma + 1.0);
@@ -99,7 +105,7 @@ void IppFilterGaussian(IppByteImage& imgSrc, IppFloatImage& imgDst, float sigma)
 	float** pBuf = imgBuf.GetPixels2D();
 
 	//-------------------------------------------------------------------------
-	// ºº∑Œ πÊ«‚ ∏∂Ω∫≈© ø¨ªÍ
+	// ÏÑ∏Î°ú Î∞©Ìñ• ÎßàÏä§ÌÅ¨ Ïó∞ÏÇ∞
 	//-------------------------------------------------------------------------
 
 	float sum1, sum2;
@@ -123,7 +129,7 @@ void IppFilterGaussian(IppByteImage& imgSrc, IppFloatImage& imgDst, float sigma)
 		}
 
 	//-------------------------------------------------------------------------
-	// ∞°∑Œ πÊ«‚ ∏∂Ω∫≈© ø¨ªÍ
+	// Í∞ÄÎ°ú Î∞©Ìñ• ÎßàÏä§ÌÅ¨ Ïó∞ÏÇ∞
 	//-------------------------------------------------------------------------
 
 	for (j = 0; j < h; j++)
@@ -165,4 +171,157 @@ void IppFilterLaplacian(IppByteImage& imgSrc, IppByteImage& imgDst)
 
 			pDst[j][i] = static_cast<BYTE>(limit(sum + 128));
 		}
+}
+
+void IppFilterUnsharpMask(IppByteImage& imgSrc, IppByteImage& imgDst)
+{
+	int w = imgSrc.GetWidth();
+	int h = imgSrc.GetHeight();
+
+	imgDst = imgSrc;
+
+	BYTE** pSrc = imgSrc.GetPixels2D();
+	BYTE** pDst = imgDst.GetPixels2D();
+
+	int i, j, sum;
+	for (j = 1; j < h - 1; j++)
+		for (i = 1; i < w - 1; i++)
+		{
+			sum = 5 * pSrc[j][i]
+				- pSrc[j - 1][i] - pSrc[j][i - 1] - pSrc[j + 1][i] - pSrc[j][i + 1];
+
+			pDst[j][i] = static_cast<BYTE>(limit(sum));
+		}
+}
+
+
+void IppFilterHighboost(IppByteImage& imgSrc, IppByteImage& imgDst, float alpha)
+{
+	int w = imgSrc.GetWidth();
+	int h = imgSrc.GetHeight();
+
+	imgDst = imgSrc;
+
+	BYTE** pSrc = imgSrc.GetPixels2D();
+	BYTE** pDst = imgDst.GetPixels2D();
+
+	int i, j;
+	float sum;
+	for (j = 1; j < h - 1; j++)
+		for (i = 1; i < w - 1; i++)
+		{
+			sum = (4 + alpha) * pSrc[j][i]
+				- pSrc[j - 1][i] - pSrc[j][i - 1] - pSrc[j + 1][i] - pSrc[j][i + 1];
+
+			pDst[j][i] = static_cast<BYTE>(limit(sum + 0.5f));
+		}
+}
+
+void IppNoiseGaussian(IppByteImage& imgSrc, IppByteImage& imgDst, int amount)
+{
+	int size = imgSrc.GetSize();
+
+	imgDst = imgSrc;
+	BYTE* pDst = imgDst.GetPixels();
+
+	unsigned int seed = static_cast<unsigned int>(time(NULL));
+	std::default_random_engine generator(seed);
+	std::normal_distribution<double> distribution(0.0, 1.0);
+
+	double rn;
+	for (int i = 0; i < size; i++)
+	{
+		rn = distribution(generator) * 255 * amount / 100;
+		pDst[i] = static_cast<BYTE>(limit(pDst[i] + rn));
+	}
+
+}
+
+void IppNoiseSaltNPepper(IppByteImage& imgSrc, IppByteImage& imgDst, int amount)
+{
+	int size = imgSrc.GetSize();
+
+	imgDst = imgSrc;
+	BYTE* pDst = imgDst.GetPixels();
+
+	unsigned int seed = static_cast<unsigned int>(time(NULL));
+	std::default_random_engine generator(seed);
+	std::uniform_int_distribution<int> distribution(0, size - 1);
+
+	int num = size * amount / 100;
+	for (int i = 0; i < num; i++)
+	{
+		pDst[distribution(generator)] = (i & 0x01) * 255;
+	}
+}
+
+void IppFilterMedian(IppByteImage& imgSrc, IppByteImage& imgDst)
+{
+	int w = imgSrc.GetWidth();
+	int h = imgSrc.GetHeight();
+
+	imgDst = imgSrc;
+
+	BYTE** pSrc = imgSrc.GetPixels2D();
+	BYTE** pDst = imgDst.GetPixels2D();
+
+	int i, j;
+	BYTE m[9];
+	for (j = 1; j < h - 1; j++)
+		for (i = 1; i < w - 1; i++)
+		{
+			m[0] = pSrc[j - 1][i - 1]; m[1] = pSrc[j - 1][i]; m[2] = pSrc[j - 1][i + 1];
+			m[3] = pSrc[j][i - 1]; m[4] = pSrc[j][i]; m[5] = pSrc[j][i + 1];
+			m[6] = pSrc[j + 1][i - 1]; m[7] = pSrc[j + 1][i]; m[8] = pSrc[j + 1][i + 1];
+
+			std::sort(m, m + 9); // Ï≤´ Î≤àÏß∏ ÏõêÏÜåÏùò Ï£ºÏÜåÏôÄ ÎßàÏßÄÎßâ ÏõêÏÜåÏùò Îã§Ïùå Ï£ºÏÜåÎ•º Ïù∏ÏûêÎ°ú Î∞õÏïÑ Ïò§Î¶ÑÏ∞®Ïàú Ï†ïÎ†¨
+
+			pDst[j][i] = m[4];
+		}
+}
+
+void IppFilterDiffusion(IppByteImage& imgSrc, IppFloatImage& imgDst, float lambda, float k, int iter)
+{
+	int w = imgSrc.GetWidth();
+	int h = imgSrc.GetHeight();
+
+	IppFloatImage imgCpy;
+	imgCpy.Convert(imgSrc);
+
+	imgDst = imgCpy;
+
+	float** pCpy = imgCpy.GetPixels2D();
+	float** pDst = imgDst.GetPixels2D();
+
+	//-------------------------------------------------------------------------
+	// iter ÌöüÏàòÎßåÌÅº ÎπÑÎì±Î∞©ÏÑ± ÌôïÏÇ∞ ÏïåÍ≥†Î¶¨Ï¶ò ÏàòÌñâ
+	//-------------------------------------------------------------------------
+
+	register int i, x, y;
+	float gradn, grads, grade, gradw;
+	float gcn, gcs, gce, gcw;
+	float k2 = k * k;
+
+	for (i = 0; i < iter; i++)
+	{
+		for (y = 1; y < h - 1; y++)
+			for (x = 1; x < w - 1; x++)
+			{
+				gradn = pCpy[y - 1][x] - pCpy[y][x];
+				grads = pCpy[y + 1][x] - pCpy[y][x];
+				grade = pCpy[y][x - 1] - pCpy[y][x];
+				gradw = pCpy[y][x + 1] - pCpy[y][x];
+
+				gcn = gradn / (1.0f + gradn * gradn / k2);
+				gcs = grads / (1.0f + grads * grads / k2);
+				gce = grade / (1.0f + grade * grade / k2);
+				gcw = gradw / (1.0f + gradw * gradw / k2);
+
+				pDst[y][x] = pCpy[y][x] + lambda * (gcn + gcs + gce + gcw);
+			}
+
+		// Î≤ÑÌçº Î≥µÏÇ¨
+		if (i < iter - 1)
+			memcpy(imgCpy.GetPixels(), imgDst.GetPixels(), sizeof(float) * w * h);
+	}
 }

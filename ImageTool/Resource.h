@@ -32,6 +32,8 @@
 #define IDD_HISTOGRAM                   320
 #define IDD_ARITHMETIC_LOGICAL          324
 #define IDD_GAUSSIAN                    326
+#define IDD_ADD_NOISE                   328
+#define IDD_DIFFUSION                   330
 #define IDC_WIDTH                       1000
 #define IDC_HEIGHT                      1001
 #define IDC_IMAGE_TYPE                  1002
@@ -51,6 +53,13 @@
 #define IDC_FUNCTION6                   1014
 #define IDC_SIGMA_SLIDER                1015
 #define IDC_SIGMA_EDIT                  1016
+#define IDC_NOISE_RADIO1                1017
+#define IDC_NOISE_RADIO2                1018
+#define IDC_NOISE_AMOUNT                1019
+#define IDC_SPIN_AMOUNT                 1020
+#define IDC_DIFFUSION_LAMDA             1021
+#define IDC_DIFFUSION_K                 1022
+#define IDC_DIFFUSION_ITER              1023
 #define ID_32771                        32771
 #define ID_WINDOW_DUPLICATE             32772
 #define ID_32773                        32773
@@ -91,14 +100,27 @@
 #define ID_                             32808
 #define ID_FILTER_WEIGHTED_MEAN         32809
 #define ID_FILTER_GAUSSIAN              32810
+#define ID_32811                        32811
+#define ID_32812                        32812
+#define ID_32813                        32813
+#define ID_LAPLACIAN                    32814
+#define ID_FILTER_UNSHARP_MASK          32815
+#define ID_FILTER_LAPLACIAN             32816
+#define ID_FILTER_HIGHBOOST             32817
+#define ID_32818                        32818
+#define ID_ADD_NOISE                    32819
+#define ID_32820                        32820
+#define ID_FILTER_MEDIAN                32821
+#define ID_32822                        32822
+#define ID_FILTER_DIFFUSION             32823
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        328
-#define _APS_NEXT_COMMAND_VALUE         32811
-#define _APS_NEXT_CONTROL_VALUE         1017
+#define _APS_NEXT_RESOURCE_VALUE        332
+#define _APS_NEXT_COMMAND_VALUE         32824
+#define _APS_NEXT_CONTROL_VALUE         1023
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
