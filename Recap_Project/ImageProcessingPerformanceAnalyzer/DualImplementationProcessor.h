@@ -10,72 +10,72 @@
 
 class DualImplementationProcessor {
 public:
-    // ¹à±â Á¶Àı Å¬·¡½º
+    // Brightness Adjustment methods
     class BrightnessAdjustment {
     public:
-        // OpenCV ¹öÀü
+        // OpenCV-based implementation
         static cv::Mat opencv_version(const cv::Mat& input, int brightness);
 
-        // Custom ¹öÀü (¿ÏÀüÈ÷ rawÇÑ ·ÎÁ÷)
-        static cv::Mat custom_version(const cv::Mat& input, int brightness);
+        // A raw, unoptimized custom implementation
+        static cv::Mat custom_raw_version(const cv::Mat& input, int brightness);
 
-        // ÃÖÀûÈ­µÈ Custom ¹öÀü (ptr »ç¿ë)
-        static cv::Mat custom_optimized_version(const cv::Mat& input, int brightness);
+        // An optimized custom implementation
+        static cv::Mat custom_version(const cv::Mat& input, int brightness);
     };
 
-    // ¸í¾Ïºñ Á¶Àı Å¬·¡½º
+    // Contrast Adjustment methods
     class ContrastAdjustment {
     public:
-        // OpenCV ¹öÀü
+        // OpenCV ï¿½ï¿½ï¿½ï¿½
         static cv::Mat opencv_version(const cv::Mat& input, double contrast);
 
-        // Custom ¹öÀü (¿ÏÀüÈ÷ rawÇÑ ·ÎÁ÷)
+        // Custom ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ rawï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
         static cv::Mat custom_version(const cv::Mat& input, double contrast);
 
-        // ÃÖÀûÈ­µÈ Custom ¹öÀü
+        // ï¿½ï¿½ï¿½ï¿½È­ï¿½ï¿½ Custom ï¿½ï¿½ï¿½ï¿½
         static cv::Mat custom_optimized_version(const cv::Mat& input, double contrast);
     };
 
-    // °¨¸¶ º¸Á¤ Å¬·¡½º
+    // Gamma Correction methods
     class GammaCorrection {
     public:
-        // OpenCV ¹öÀü
+        // OpenCV-based implementation
         static cv::Mat opencv_version(const cv::Mat& input, double gamma);
 
-        // Custom ¹öÀü (¿ÏÀüÈ÷ rawÇÑ ·ÎÁ÷)
-        static cv::Mat custom_version(const cv::Mat& input, double gamma);
+        // A raw, unoptimized custom implementation
+        static cv::Mat custom_raw_version(const cv::Mat& input, double gamma);
 
-        // LUT ±â¹İ Custom ¹öÀü (rawÇÑ LUT ±¸Çö)
-        static cv::Mat custom_lut_version(const cv::Mat& input, double gamma);
+        // An optimized custom implementation using a LUT
+        static cv::Mat custom_version(const cv::Mat& input, double gamma);
     };
 
-    // ¿µ»ó ¹İÀü Å¬·¡½º
+    // Image Inversion methods
     class ImageInversion {
     public:
-        // OpenCV ¹öÀü
+        // OpenCV ï¿½ï¿½ï¿½ï¿½
         static cv::Mat opencv_version(const cv::Mat& input);
 
-        // Custom ¹öÀü (¿ÏÀüÈ÷ rawÇÑ ·ÎÁ÷)
+        // Custom ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ rawï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
         static cv::Mat custom_version(const cv::Mat& input);
 
-        // ÃÖÀûÈ­µÈ Custom ¹öÀü
+        // ï¿½ï¿½ï¿½ï¿½È­ï¿½ï¿½ Custom ï¿½ï¿½ï¿½ï¿½
         static cv::Mat custom_optimized_version(const cv::Mat& input);
     };
 
-    // È÷½ºÅä±×·¥ ÆòÈ°È­ Å¬·¡½º
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×·ï¿½ ï¿½ï¿½È°È­ Å¬ï¿½ï¿½ï¿½ï¿½
     class HistogramEqualization {
     public:
-        // OpenCV ¹öÀü
+        // OpenCV ï¿½ï¿½ï¿½ï¿½
         static cv::Mat opencv_version(const cv::Mat& input);
 
-        // Custom ¹öÀü (´©ÀûºĞÆ÷ÇÔ¼ö »ç¿ë, rawÇÑ ·ÎÁ÷)
+        // Custom ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½, rawï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
         static cv::Mat custom_version(const cv::Mat& input);
 
-        // ÃÖÀûÈ­µÈ Custom ¹öÀü
+        // ï¿½ï¿½ï¿½ï¿½È­ï¿½ï¿½ Custom ï¿½ï¿½ï¿½ï¿½
         static cv::Mat custom_optimized_version(const cv::Mat& input);
     };
 
-    // »ö»ó °ø°£ º¯È¯ Å¬·¡½º
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ Å¬ï¿½ï¿½ï¿½ï¿½
     class ColorSpaceConversion {
     public:
         // RGB to Grayscale
@@ -88,13 +88,13 @@ public:
     };
 
 private:
-    // ³»ºÎ ÇïÆÛ ÇÔ¼öµé (rawÇÑ ±¸Çö)
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ (rawï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
     static void validateInput(const cv::Mat& input);
     static unsigned char* createRawLUT(double gamma);
     static std::vector<int> calculateHistogramRaw(const cv::Mat& input);
     static std::vector<int> calculateCumulativeHistogramRaw(const std::vector<int>& histogram);
 
-    // Raw ÀÌ¹ÌÁö Ã³¸® ÇïÆÛ
+    // Raw ï¿½Ì¹ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     static unsigned char* createRawImage(int width, int height, int channels);
     static void destroyRawImage(unsigned char* image);
     static void copyMatToRaw(const cv::Mat& input, unsigned char* raw_data);

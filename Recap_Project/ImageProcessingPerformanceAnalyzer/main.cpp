@@ -41,52 +41,77 @@ int main() {
     return 0;
 }
 
-//기본 성능 비교 함수
-void runBasicPerformanceComparison() 
+// A basic performance comparison based on the following philosophy:
+// Step 1 (Proximate Goal): Write raw C++ code without OpenCV's high-level functions
+// to understand the performance bottlenecks (e.g., memory allocation, per-pixel processing).
+// Step 2 (Ultimate Goal): Apply advanced optimization techniques (e.g., LUT, direct memory access)
+// to surpass the performance of general-purpose libraries like OpenCV for specific tasks.
+void runBasicPerformanceComparison()
 {
-    cout << "\n=== 기본 성능 비교 ===" << endl;
+    cout << "\n=== Basic Performance Comparison ===" << endl;
 
-    // 테스트 이미지 생성
     TestImageGenerator generator;
     Mat testImage = generator.createTestImage(Size(512, 512), CV_8UC1);
-
     PerformanceAnalyzer analyzer;
+    int iterations = 100;
 
-    // 밝기 조절 비교
+    // --- Brightness Adjustment Comparison ---
     {
+        cout << "\n--- Brightness Adjustment ---" << endl;
         int brightness = 50;
-        auto opencv_func = [brightness](const Mat& img) {
-            return DualImplementationProcessor::BrightnessAdjustment::opencv_version(img, brightness);
-            };
-        auto custom_func = [brightness](const Mat& img) {
-            return DualImplementationProcessor::BrightnessAdjustment::custom_version(img, brightness);
-            };
 
-		auto result = analyzer.runComparison("Brightness_Adjustment", opencv_func, custom_func, testImage, 100); // 각 함수를 100회씩 실행한 결과를 반환
+        // Step 1: Compare OpenCV with the raw, unoptimized version
+        cout << "Step 1: Understanding bottlenecks (OpenCV vs. Raw)" << endl;
+        auto result_raw = analyzer.runComparison(
+            "Brightness (Raw)",
+            [&](const Mat& img) { return DualImplementationProcessor::BrightnessAdjustment::opencv_version(img, brightness); },
+            [&](const Mat& img) { return DualImplementationProcessor::BrightnessAdjustment::custom_raw_version(img, brightness); },
+            testImage, iterations
+        );
+        cout << "  OpenCV Time: " << fixed << setprecision(3) << result_raw.opencvTime << " ms" << endl;
+        cout << "  Custom Raw Time: " << result_raw.customTime << " ms" << endl;
+        cout << "  Speedup (OpenCV vs Raw): " << result_raw.speedupRatio << "x" << endl;
 
-        cout << "   밝기 조절 결과:" << endl;
-        cout << "   OpenCV: " << fixed << setprecision(2) << result.opencvTime << " ms" << endl;
-        cout << "   Custom: " << result.customTime << " ms" << endl;
-        cout << "   성능 비율: " << result.speedupRatio << "x" << endl;
-        cout << "   정확도 차이: " << result.accuracy << "% (Custom - OpenCV)" << endl;
+        // Step 2: Compare OpenCV with the optimized version
+        cout << "\nStep 2: Surpassing general-purpose performance (OpenCV vs. Optimized)" << endl;
+        auto result_optimized = analyzer.runComparison(
+            "Brightness (Optimized)",
+            [&](const Mat& img) { return DualImplementationProcessor::BrightnessAdjustment::opencv_version(img, brightness); },
+            [&](const Mat& img) { return DualImplementationProcessor::BrightnessAdjustment::custom_version(img, brightness); },
+            testImage, iterations
+        );
+        cout << "  OpenCV Time: " << result_optimized.opencvTime << " ms" << endl;
+        cout << "  Custom Optimized Time: " << result_optimized.customTime << " ms" << endl;
+        cout << "  Speedup (Optimized vs OpenCV): " << result_optimized.speedupRatio << "x" << endl;//최적화된 버전과 OpenCV의 성능을 비교하는 비율
     }
 
-    // 감마 보정 비교
+    // --- Gamma Correction Comparison ---
     {
+        cout << "\n--- Gamma Correction ---" << endl;
         double gamma = 2.0;
-        auto opencv_func = [gamma](const Mat& img) {
-            return DualImplementationProcessor::GammaCorrection::opencv_version(img, gamma);
-            };
-        auto custom_func = [gamma](const Mat& img) {
-            return DualImplementationProcessor::GammaCorrection::custom_version(img, gamma);
-            };
 
-        auto result = analyzer.runComparison("Gamma_Correction", opencv_func, custom_func, testImage, 100);
+        // Step 1: Compare OpenCV with the raw, unoptimized version
+        cout << "Step 1: Understanding bottlenecks (OpenCV vs. Raw)" << endl;
+        auto result_raw = analyzer.runComparison(
+            "Gamma (Raw)",
+            [&](const Mat& img) { return DualImplementationProcessor::GammaCorrection::opencv_version(img, gamma); },
+            [&](const Mat& img) { return DualImplementationProcessor::GammaCorrection::custom_raw_version(img, gamma); },
+            testImage, iterations
+        );
+        cout << "  OpenCV Time: " << fixed << setprecision(3) << result_raw.opencvTime << " ms" << endl;
+        cout << "  Custom Raw Time: " << result_raw.customTime << " ms" << endl;
+        cout << "  Speedup (OpenCV vs Raw): " << result_raw.speedupRatio << "x" << endl;
 
-        cout << "\n 감마 보정 결과:" << endl;
-        cout << "   OpenCV: " << result.opencvTime << " ms" << endl;
-        cout << "   Custom: " << result.customTime << " ms" << endl;
-        cout << "   성능 비율: " << result.speedupRatio << "x" << endl;
-        cout << "   정확도 차이: " << result.accuracy << "% (Custom - OpenCV)" << endl;
+        // Step 2: Compare OpenCV with the optimized version (LUT-based)
+        cout << "\nStep 2: Surpassing general-purpose performance (OpenCV vs. Optimized)" << endl;
+        auto result_optimized = analyzer.runComparison(
+            "Gamma (Optimized)",
+            [&](const Mat& img) { return DualImplementationProcessor::GammaCorrection::opencv_version(img, gamma); },
+            [&](const Mat& img) { return DualImplementationProcessor::GammaCorrection::custom_version(img, gamma); },
+            testImage, iterations
+        );
+        cout << "  OpenCV Time: " << result_optimized.opencvTime << " ms" << endl;
+        cout << "  Custom Optimized Time: " << result_optimized.customTime << " ms" << endl;
+        cout << "  Speedup (Optimized vs OpenCV): " << result_optimized.speedupRatio << "x" << endl; //최적화된 버전과 OpenCV의 성능을 비교하는 비율
     }
 }
