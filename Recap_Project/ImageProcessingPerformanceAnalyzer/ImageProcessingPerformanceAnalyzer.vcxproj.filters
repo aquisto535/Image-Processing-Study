@@ -25,6 +25,15 @@
     <Filter Include="Src\Utils">
       <UniqueIdentifier>{e72a04e5-eaff-4610-864a-ebd71ac4221d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Algorithms">
+      <UniqueIdentifier>{7c5a2ab8-09a2-4082-a61c-dc1299d9db7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Algorithms\Histogram">
+      <UniqueIdentifier>{5947223e-99ff-435b-827b-b8567369c8a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Algorithms\ColorSpace">
+      <UniqueIdentifier>{c65a8151-3038-4dbf-b0c3-f23013f055cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PerformanceAnalyzer.cpp">
@@ -42,6 +51,18 @@
     <ClCompile Include="DualImplementationProcessor.cpp">
       <Filter>Src\Core\소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="GammaCorrection.cpp">
+      <Filter>Src\Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="HistogramEqualization.cpp">
+      <Filter>Src\Algorithms\Histogram</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorSpaceConversion.cpp">
+      <Filter>Src\Algorithms\ColorSpace</Filter>
+    </ClCompile>
+    <ClCompile Include="ComprehensiveBenchmark.cpp">
+      <Filter>Src\Core\소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PerformanceAnalyzer.h">
@@ -54,6 +75,18 @@
       <Filter>Src\Utils</Filter>
     </ClInclude>
     <ClInclude Include="DualImplementationProcessor.h">
+      <Filter>Src\Core\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GammaCorrection.h">
+      <Filter>Src\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="HistogramEqualization.h">
+      <Filter>Src\Algorithms\Histogram</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorSpaceConversion.h">
+      <Filter>Src\Algorithms\ColorSpace</Filter>
+    </ClInclude>
+    <ClInclude Include="ComprehensiveBenchmark.h">
       <Filter>Src\Core\헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

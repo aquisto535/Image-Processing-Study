@@ -135,14 +135,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AdvancedVisualization.cpp" />
+    <ClCompile Include="ColorSpaceConversion.cpp" />
+    <ClCompile Include="ComprehensiveBenchmark.cpp" />
     <ClCompile Include="DualImplementationProcessor.cpp" />
+    <ClCompile Include="GammaCorrection.cpp" />
+    <ClCompile Include="HistogramEqualization.cpp" />
     <ClCompile Include="PerformanceAnalyzer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TestImageGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdvancedVisualization.h" />
+    <ClInclude Include="ColorSpaceConversion.h" />
+    <ClInclude Include="ComprehensiveBenchmark.h" />
     <ClInclude Include="DualImplementationProcessor.h" />
+    <ClInclude Include="GammaCorrection.h" />
+    <ClInclude Include="HistogramEqualization.h" />
     <ClInclude Include="PerformanceAnalyzer.h" />
     <ClInclude Include="TestImageGenerator.h" />
   </ItemGroup>

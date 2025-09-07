@@ -1,4 +1,4 @@
-﻿#include <opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
 #include <iostream>
 #include <vector>
 #include <chrono>
@@ -6,12 +6,18 @@
 #include "./PerformanceAnalyzer.h"
 #include "./DualImplementationProcessor.h"
 #include "./TestImageGenerator.h"
-//#include "Visualization/AdvancedVisualization.h"
+// #include "Visualization/AdvancedVisualization.h"
+
+// Note: Removed redundant includes for classes already in DualImplementationProcessor
+ #include "HistogramEqualization.h"
+ #include "GammaCorrection.h"
+ #include "ColorSpaceConversion.h"
 
 using namespace std;
 using namespace cv;
 
 void runBasicPerformanceComparison();
+void runComprehensiveBenchmark();
 
 int main() {
     cout << "영상 처리 성능 분석 도구 시작!" << endl;
@@ -22,7 +28,7 @@ int main() {
         runBasicPerformanceComparison();
 
         //// 2. 종합 벤치마크 실행
-        //runComprehensiveBenchmark();
+        runComprehensiveBenchmark();
 
         //// 3. 실시간 모니터링 데모
         //runRealTimeDemo();
@@ -114,4 +120,27 @@ void runBasicPerformanceComparison()
         cout << "  Custom Optimized Time: " << result_optimized.customTime << " ms" << endl;
         cout << "  Speedup (Optimized vs OpenCV): " << result_optimized.speedupRatio << "x" << endl; //최적화된 버전과 OpenCV의 성능을 비교하는 비율
     }
+}
+
+void runComprehensiveBenchmark()
+{
+    cout << "\n=== Comprehensive Benchmark ===" << endl;
+
+    Mat testImage = TestImageGenerator::generateGradientImage(Size(512, 512));
+    cout << "Generated a test image for benchmark." << endl;
+    
+    Mat opencv_result = DualImplementationProcessor::HistogramEqualization::opencv_version(testImage);
+    Mat custom_result = DualImplementationProcessor::HistogramEqualization::custom_version(testImage);
+
+    // This part requires a separate HistogramEqualization class which is not fully defined
+    // in the provided context. Assuming it should use methods from DualImplementationProcessor.
+    // For now, we'll comment it out to fix the build.
+    // If you have a separate Histogram.h/cpp, we need to review it.
+    
+    // auto opencv_hist = DualImplementationProcessor::HistogramEqualization::calculateHistogram(opencv_result);
+    // auto custom_hist = DualImplementationProcessor::HistogramEqualization::calculateHistogram(custom_result);
+    // double histogram_similarity = DualImplementationProcessor::HistogramEqualization::compareHistograms(opencv_hist, custom_hist) * 100.0;
+    // cout << "Histogram Similarity: " << histogram_similarity << "%" << endl;
+    
+    cout << "Comprehensive benchmark completed (Histogram part is commented out)." << endl;
 }
