@@ -34,6 +34,9 @@
 #define IDD_GAUSSIAN                    326
 #define IDD_ADD_NOISE                   328
 #define IDD_DIFFUSION                   330
+#define IDD_TRANSLATE                   332
+#define IDD_RESIZE                      334
+#define IDD_ROTATE                      337
 #define IDC_WIDTH                       1000
 #define IDC_HEIGHT                      1001
 #define IDC_IMAGE_TYPE                  1002
@@ -60,6 +63,21 @@
 #define IDC_DIFFUSION_LAMDA             1021
 #define IDC_DIFFUSION_K                 1022
 #define IDC_DIFFUSION_ITER              1023
+#define IDC_NEW_SX                      1023
+#define IDC_NEW_SY                      1024
+#define IDC_NEW_WIDTH                   1024
+#define IDC_NEW_HEIGHT                  1025
+#define IDC_SPIN_WIDTH                  1027
+#define IDC_SPIN_HEIGHT                 1028
+#define IDC_ASPECT_RATIO                1029
+#define IDC_INTERPORATION               1030
+#define IDC_OLD_WIDTH                   1031
+#define IDC_OLD_HEIGHT                  1032
+#define IDC_ROTATE1                     1033
+#define IDC_ROTATE2                     1034
+#define IDC_ROTATE3                     1035
+#define IDC_ROTATE4                     1036
+#define IDC_ANGLE                       1037
 #define ID_32771                        32771
 #define ID_WINDOW_DUPLICATE             32772
 #define ID_32773                        32773
@@ -113,14 +131,24 @@
 #define ID_FILTER_MEDIAN                32821
 #define ID_32822                        32822
 #define ID_FILTER_DIFFUSION             32823
+#define ID_32824                        32824
+#define ID_IMAGE_TRANSLATION            32825
+#define ID_32826                        32826
+#define ID_IMAGE_RESIZE                 32827
+#define ID_32828                        32828
+#define ID_IMAGE_ROTATE                 32829
+#define ID_32830                        32830
+#define ID_32831                        32831
+#define ID_IMAGE_MIRROR                 32832
+#define ID_IMAGE_FLIP                   32833
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        332
-#define _APS_NEXT_COMMAND_VALUE         32824
-#define _APS_NEXT_CONTROL_VALUE         1023
+#define _APS_NEXT_RESOURCE_VALUE        339
+#define _APS_NEXT_COMMAND_VALUE         32834
+#define _APS_NEXT_CONTROL_VALUE         1038
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
