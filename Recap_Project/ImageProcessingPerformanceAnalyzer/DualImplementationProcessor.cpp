@@ -120,14 +120,29 @@ cv::Mat DualImplementationProcessor::ContrastAdjustment::opencv_version(const cv
 cv::Mat DualImplementationProcessor::ContrastAdjustment::custom_version(const cv::Mat& input, double contrast) {
     validateInput(input);
     cv::Mat result = input.clone();
-    for (int y = 0; y < result.rows; y++) {
-        for (int x = 0; x < result.cols; x++) {
-            for (int c = 0; c < result.channels(); c++) {
-                double new_value = (result.at<cv::Vec3b>(y, x)[c] - 128) * contrast + 128;
-                result.at<cv::Vec3b>(y, x)[c] = cv::saturate_cast<uchar>(new_value);
+    int channels = input.channels();
+
+    if (channels == 1) { // Grayscale image processing
+        for (int y = 0; y < result.rows; y++) {
+            for (int x = 0; x < result.cols; x++) {
+                double new_value = (result.at<uchar>(y, x) - 128) * contrast + 128;
+                result.at<uchar>(y, x) = cv::saturate_cast<uchar>(new_value);
             }
         }
     }
+    else if (channels == 3) { // Color image processing
+        for (int y = 0; y < result.rows; y++) {
+            for (int x = 0; x < result.cols; x++) {
+                for (int c = 0; c < 3; c++) {
+                    double new_value = (result.at<cv::Vec3b>(y, x)[c] - 128) * contrast + 128;
+                    result.at<cv::Vec3b>(y, x)[c] = cv::saturate_cast<uchar>(new_value);
+                }
+            }
+        }
+    }
+    // Note: This implementation now correctly handles both grayscale and color images
+    // by using the appropriate pixel access method for each case.
+
     return result;
 }
 

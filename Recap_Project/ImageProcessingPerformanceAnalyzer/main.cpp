@@ -124,23 +124,68 @@ void runBasicPerformanceComparison()
 
 void runComprehensiveBenchmark()
 {
-    cout << "\n=== Comprehensive Benchmark ===" << endl;
+    cout << "\n\n--- Starting Comprehensive Benchmark ---" << endl;
+    PerformanceAnalyzer analyzer;
+    TestImageGenerator generator;
 
-    Mat testImage = TestImageGenerator::generateGradientImage(Size(512, 512));
-    cout << "Generated a test image for benchmark." << endl;
-    
-    Mat opencv_result = DualImplementationProcessor::HistogramEqualization::opencv_version(testImage);
-    Mat custom_result = DualImplementationProcessor::HistogramEqualization::custom_version(testImage);
+    // 1. Prepare a set of test images
+    vector<Mat> testImages;
+    testImages.push_back(generator.createTestImage(Size(256, 256), CV_8UC1));
+    testImages.push_back(generator.createTestImage(Size(512, 512), CV_8UC1));
+    testImages.push_back(generator.createTestImage(Size(1024, 1024), CV_8UC1));
+    testImages.push_back(generator.createTestImage(Size(256, 256), CV_8UC3));
+    testImages.push_back(generator.createTestImage(Size(512, 512), CV_8UC3));
+    testImages.push_back(generator.createTestImage(Size(1024, 1024), CV_8UC3));
 
-    // This part requires a separate HistogramEqualization class which is not fully defined
-    // in the provided context. Assuming it should use methods from DualImplementationProcessor.
-    // For now, we'll comment it out to fix the build.
-    // If you have a separate Histogram.h/cpp, we need to review it.
-    
-    // auto opencv_hist = DualImplementationProcessor::HistogramEqualization::calculateHistogram(opencv_result);
-    // auto custom_hist = DualImplementationProcessor::HistogramEqualization::calculateHistogram(custom_result);
-    // double histogram_similarity = DualImplementationProcessor::HistogramEqualization::compareHistograms(opencv_hist, custom_hist) * 100.0;
-    // cout << "Histogram Similarity: " << histogram_similarity << "%" << endl;
-    
-    cout << "Comprehensive benchmark completed (Histogram part is commented out)." << endl;
+    // 2. Define a list of algorithms to test
+    vector<string> algorithms = {
+        "BrightnessAdjustment",
+        "GammaCorrection",
+        "ContrastAdjustment",
+        "HistogramEqualization" 
+    };
+
+    int total_tests = testImages.size() * algorithms.size();
+    int current_test = 0;
+
+    // 3. Run benchmarks for each algorithm on each image
+    for (const auto& algo_name : algorithms) {
+        for (const auto& image : testImages) {
+            current_test++;
+            cout << "\n[Test " << current_test << "/" << total_tests << "] Running " << algo_name
+                << " on image " << image.cols << "x" << image.rows << " (" << image.channels() << " channels)" << endl;
+
+            if (algo_name == "BrightnessAdjustment") {
+                int brightness = 50;
+                auto opencv_func = [&](const Mat& img) { return DualImplementationProcessor::BrightnessAdjustment::opencv_version(img, brightness); };
+                auto custom_func = [&](const Mat& img) { return DualImplementationProcessor::BrightnessAdjustment::custom_version(img, brightness); };
+                analyzer.runComparison(algo_name, opencv_func, custom_func, image);
+            }
+            else if (algo_name == "GammaCorrection") {
+                double gamma = 2.2;
+                auto opencv_func = [&](const Mat& img) { return DualImplementationProcessor::GammaCorrection::opencv_version(img, gamma); };
+                auto custom_func = [&](const Mat& img) { return DualImplementationProcessor::GammaCorrection::custom_version(img, gamma); };
+                analyzer.runComparison(algo_name, opencv_func, custom_func, image);
+            }
+            else if (algo_name == "ContrastAdjustment") {
+                double contrast = 1.5;
+                auto opencv_func = [&](const Mat& img) { return DualImplementationProcessor::ContrastAdjustment::opencv_version(img, contrast); };
+                auto custom_func = [&](const Mat& img) { return DualImplementationProcessor::ContrastAdjustment::custom_version(img, contrast); };
+                analyzer.runComparison(algo_name, opencv_func, custom_func, image);
+            }
+            else if (algo_name == "HistogramEqualization") {
+                if (image.channels() == 1) { // Histogram Equalization only for grayscale
+                    auto opencv_func = [&](const Mat& img) { return DualImplementationProcessor::HistogramEqualization::opencv_version(img); };
+                    auto custom_func = [&](const Mat& img) { return DualImplementationProcessor::HistogramEqualization::custom_version(img); };
+                    analyzer.runComparison(algo_name, opencv_func, custom_func, image);
+                } else {
+                    cout << "Skipping for color image." << endl;
+                }
+            }
+        }
+    }
+
+    // 4. Generate a report from the results
+    cout << "\n--- Comprehensive Benchmark Finished ---" << endl;
+    analyzer.generateReport("Comprehensive_Benchmark_Report.xml");
 }
