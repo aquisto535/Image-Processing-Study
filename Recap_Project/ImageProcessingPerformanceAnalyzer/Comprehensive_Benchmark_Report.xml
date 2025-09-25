@@ -1,194 +1,194 @@
 <?xml version="1.0"?>
 <opencv_storage>
 <PerformanceAnalysisReport>
-  <GeneratedDate>"2025-09-09 21:25:36"</GeneratedDate>
+  <GeneratedDate>"2025-09-11 20:18:58"</GeneratedDate>
   <TotalAlgorithms>21</TotalAlgorithms>
   <Results>
     <_>
       <Algorithm>BrightnessAdjustment</Algorithm>
-      <OpenCVTime>0.0083370000000000007</OpenCVTime>
-      <CustomTime>0.035734000000000002</CustomTime>
-      <PerformanceRatio>4.2861940746071729</PerformanceRatio>
+      <OpenCVTime>0.0087100000000000007</OpenCVTime>
+      <CustomTime>0.033695000000000003</CustomTime>
+      <PerformanceRatio>3.8685419058553387</PerformanceRatio>
       <Accuracy>0.</Accuracy>
       <ImageSize>65536.</ImageSize>
       <ImageType>grayscale</ImageType>
       <MemoryUsage>65536</MemoryUsage></_>
     <_>
       <Algorithm>BrightnessAdjustment</Algorithm>
-      <OpenCVTime>0.103743</OpenCVTime>
-      <CustomTime>0.215146</CustomTime>
-      <PerformanceRatio>2.073836307027944</PerformanceRatio>
+      <OpenCVTime>0.032885999999999999</OpenCVTime>
+      <CustomTime>0.18244700000000003</CustomTime>
+      <PerformanceRatio>5.5478623122301292</PerformanceRatio>
       <Accuracy>0.</Accuracy>
       <ImageSize>262144.</ImageSize>
       <ImageType>grayscale</ImageType>
       <MemoryUsage>262144</MemoryUsage></_>
     <_>
       <Algorithm>BrightnessAdjustment</Algorithm>
-      <OpenCVTime>0.45228299999999999</OpenCVTime>
-      <CustomTime>1.068721</CustomTime>
-      <PerformanceRatio>2.362947535061013</PerformanceRatio>
+      <OpenCVTime>0.334366</OpenCVTime>
+      <CustomTime>0.82098399999999994</CustomTime>
+      <PerformanceRatio>2.4553453401362577</PerformanceRatio>
       <Accuracy>0.</Accuracy>
       <ImageSize>1048576.</ImageSize>
       <ImageType>grayscale</ImageType>
       <MemoryUsage>1048576</MemoryUsage></_>
     <_>
       <Algorithm>BrightnessAdjustment</Algorithm>
-      <OpenCVTime>0.045426000000000001</OpenCVTime>
-      <CustomTime>0.49239300000000003</CustomTime>
-      <PerformanceRatio>10.839453176594901</PerformanceRatio>
+      <OpenCVTime>0.040503999999999998</OpenCVTime>
+      <CustomTime>0.3992</CustomTime>
+      <PerformanceRatio>9.8558167094607949</PerformanceRatio>
       <Accuracy>0.</Accuracy>
       <ImageSize>65536.</ImageSize>
       <ImageType>color</ImageType>
       <MemoryUsage>196608</MemoryUsage></_>
     <_>
       <Algorithm>BrightnessAdjustment</Algorithm>
-      <OpenCVTime>0.27068900000000001</OpenCVTime>
-      <CustomTime>1.8695109999999999</CustomTime>
-      <PerformanceRatio>6.9064904743081534</PerformanceRatio>
+      <OpenCVTime>0.16488800000000001</OpenCVTime>
+      <CustomTime>1.8779140000000001</CustomTime>
+      <PerformanceRatio>11.389027703653388</PerformanceRatio>
       <Accuracy>0.</Accuracy>
       <ImageSize>262144.</ImageSize>
       <ImageType>color</ImageType>
       <MemoryUsage>786432</MemoryUsage></_>
     <_>
       <Algorithm>BrightnessAdjustment</Algorithm>
-      <OpenCVTime>1.0391060000000001</OpenCVTime>
-      <CustomTime>7.9942269999999995</CustomTime>
-      <PerformanceRatio>7.6933700700409764</PerformanceRatio>
+      <OpenCVTime>1.3915379999999999</OpenCVTime>
+      <CustomTime>7.7347810000000008</CustomTime>
+      <PerformanceRatio>5.558440373169832</PerformanceRatio>
       <Accuracy>0.</Accuracy>
       <ImageSize>1048576.</ImageSize>
       <ImageType>color</ImageType>
       <MemoryUsage>3145728</MemoryUsage></_>
     <_>
       <Algorithm>GammaCorrection</Algorithm>
-      <OpenCVTime>0.181782</OpenCVTime>
-      <CustomTime>0.023050000000000001</CustomTime>
-      <PerformanceRatio>0.12680023324641604</PerformanceRatio>
+      <OpenCVTime>0.170488</OpenCVTime>
+      <CustomTime>0.023142999999999997</CustomTime>
+      <PerformanceRatio>0.13574562432546569</PerformanceRatio>
       <Accuracy>-11.810914292807091</Accuracy>
       <ImageSize>65536.</ImageSize>
       <ImageType>grayscale</ImageType>
       <MemoryUsage>65536</MemoryUsage></_>
     <_>
       <Algorithm>GammaCorrection</Algorithm>
-      <OpenCVTime>0.87307800000000002</OpenCVTime>
-      <CustomTime>0.088725999999999999</CustomTime>
-      <PerformanceRatio>0.10162436804042708</PerformanceRatio>
+      <OpenCVTime>0.870506</OpenCVTime>
+      <CustomTime>0.073810000000000001</CustomTime>
+      <PerformanceRatio>0.084789765952216295</PerformanceRatio>
       <Accuracy>-7.0373272965897584</Accuracy>
       <ImageSize>262144.</ImageSize>
       <ImageType>grayscale</ImageType>
       <MemoryUsage>262144</MemoryUsage></_>
     <_>
       <Algorithm>GammaCorrection</Algorithm>
-      <OpenCVTime>4.0972900000000001</OpenCVTime>
-      <CustomTime>0.40228799999999998</CustomTime>
-      <PerformanceRatio>0.098183921567670335</PerformanceRatio>
+      <OpenCVTime>3.6586250000000002</OpenCVTime>
+      <CustomTime>0.383328</CustomTime>
+      <PerformanceRatio>0.10477378796679079</PerformanceRatio>
       <Accuracy>-4.0823358792493423</Accuracy>
       <ImageSize>1048576.</ImageSize>
       <ImageType>grayscale</ImageType>
       <MemoryUsage>1048576</MemoryUsage></_>
     <_>
       <Algorithm>GammaCorrection</Algorithm>
-      <OpenCVTime>0.79996200000000006</OpenCVTime>
-      <CustomTime>0.080907999999999994</CustomTime>
-      <PerformanceRatio>0.10113980414069666</PerformanceRatio>
-      <Accuracy>1.5212628944673412</Accuracy>
+      <OpenCVTime>0.62924599999999997</OpenCVTime>
+      <CustomTime>0.075448000000000001</CustomTime>
+      <PerformanceRatio>0.11990223219535763</PerformanceRatio>
+      <Accuracy>1.5869064173150491</Accuracy>
       <ImageSize>65536.</ImageSize>
       <ImageType>color</ImageType>
       <MemoryUsage>196608</MemoryUsage></_>
     <_>
       <Algorithm>GammaCorrection</Algorithm>
-      <OpenCVTime>3.1387419999999997</OpenCVTime>
-      <CustomTime>0.23285900000000001</CustomTime>
-      <PerformanceRatio>0.074188639907325937</PerformanceRatio>
-      <Accuracy>1.5652544055376723</Accuracy>
+      <OpenCVTime>2.3940320000000002</OpenCVTime>
+      <CustomTime>0.160631</CustomTime>
+      <PerformanceRatio>0.067096429788741335</PerformanceRatio>
+      <Accuracy>1.5717243897901483</Accuracy>
       <ImageSize>262144.</ImageSize>
       <ImageType>color</ImageType>
       <MemoryUsage>786432</MemoryUsage></_>
     <_>
       <Algorithm>GammaCorrection</Algorithm>
-      <OpenCVTime>12.586701</OpenCVTime>
-      <CustomTime>1.0054340000000002</CustomTime>
-      <PerformanceRatio>0.079880661342475692</PerformanceRatio>
-      <Accuracy>1.5701767196638343</Accuracy>
+      <OpenCVTime>11.608073999999998</OpenCVTime>
+      <CustomTime>0.89483999999999997</CustomTime>
+      <PerformanceRatio>0.077087723596524285</PerformanceRatio>
+      <Accuracy>1.5612226575011618</Accuracy>
       <ImageSize>1048576.</ImageSize>
       <ImageType>color</ImageType>
       <MemoryUsage>3145728</MemoryUsage></_>
     <_>
       <Algorithm>ContrastAdjustment</Algorithm>
-      <OpenCVTime>0.012576</OpenCVTime>
-      <CustomTime>0.118394</CustomTime>
-      <PerformanceRatio>9.414281170483461</PerformanceRatio>
+      <OpenCVTime>0.0094359999999999999</OpenCVTime>
+      <CustomTime>0.11605800000000001</CustomTime>
+      <PerformanceRatio>12.299491309877068</PerformanceRatio>
       <Accuracy>28.170496677426772</Accuracy>
       <ImageSize>65536.</ImageSize>
       <ImageType>grayscale</ImageType>
       <MemoryUsage>65536</MemoryUsage></_>
     <_>
       <Algorithm>ContrastAdjustment</Algorithm>
-      <OpenCVTime>0.063125000000000001</OpenCVTime>
-      <CustomTime>0.41559600000000002</CustomTime>
-      <PerformanceRatio>6.5836990099009904</PerformanceRatio>
+      <OpenCVTime>0.053948000000000003</OpenCVTime>
+      <CustomTime>0.41499400000000003</CustomTime>
+      <PerformanceRatio>7.6924816489953294</PerformanceRatio>
       <Accuracy>22.722569341389189</Accuracy>
       <ImageSize>262144.</ImageSize>
       <ImageType>grayscale</ImageType>
       <MemoryUsage>262144</MemoryUsage></_>
     <_>
       <Algorithm>ContrastAdjustment</Algorithm>
-      <OpenCVTime>0.39984599999999998</OpenCVTime>
-      <CustomTime>2.3153700000000002</CustomTime>
-      <PerformanceRatio>5.7906544019447495</PerformanceRatio>
+      <OpenCVTime>0.309944</OpenCVTime>
+      <CustomTime>1.8234600000000001</CustomTime>
+      <PerformanceRatio>5.8831918023901091</PerformanceRatio>
       <Accuracy>19.440230240516026</Accuracy>
       <ImageSize>1048576.</ImageSize>
       <ImageType>grayscale</ImageType>
       <MemoryUsage>1048576</MemoryUsage></_>
     <_>
       <Algorithm>ContrastAdjustment</Algorithm>
-      <OpenCVTime>0.046848000000000001</OpenCVTime>
-      <CustomTime>1.287849</CustomTime>
-      <PerformanceRatio>27.489946209016395</PerformanceRatio>
-      <Accuracy>6.2421797276028599</Accuracy>
+      <OpenCVTime>0.033263000000000001</OpenCVTime>
+      <CustomTime>1.1343970000000001</CustomTime>
+      <PerformanceRatio>34.103869163935904</PerformanceRatio>
+      <Accuracy>6.3350274866593566</Accuracy>
       <ImageSize>65536.</ImageSize>
       <ImageType>color</ImageType>
       <MemoryUsage>196608</MemoryUsage></_>
     <_>
       <Algorithm>ContrastAdjustment</Algorithm>
-      <OpenCVTime>0.14787</OpenCVTime>
-      <CustomTime>5.2173360000000004</CustomTime>
-      <PerformanceRatio>35.283262325015215</PerformanceRatio>
-      <Accuracy>6.2946227394593848</Accuracy>
+      <OpenCVTime>0.12753700000000001</OpenCVTime>
+      <CustomTime>4.545013</CustomTime>
+      <PerformanceRatio>35.636819119157572</PerformanceRatio>
+      <Accuracy>6.2937377279944116</Accuracy>
       <ImageSize>262144.</ImageSize>
       <ImageType>color</ImageType>
       <MemoryUsage>786432</MemoryUsage></_>
     <_>
       <Algorithm>ContrastAdjustment</Algorithm>
-      <OpenCVTime>1.090746</OpenCVTime>
-      <CustomTime>23.118861000000003</CustomTime>
-      <PerformanceRatio>21.195457970966661</PerformanceRatio>
-      <Accuracy>6.2893942648280614</Accuracy>
+      <OpenCVTime>0.915852</OpenCVTime>
+      <CustomTime>19.046143000000001</CustomTime>
+      <PerformanceRatio>20.796092600114431</PerformanceRatio>
+      <Accuracy>6.2819055390622793</Accuracy>
       <ImageSize>1048576.</ImageSize>
       <ImageType>color</ImageType>
       <MemoryUsage>3145728</MemoryUsage></_>
     <_>
       <Algorithm>HistogramEqualization</Algorithm>
-      <OpenCVTime>0.057152000000000001</OpenCVTime>
-      <CustomTime>0.077707999999999999</CustomTime>
-      <PerformanceRatio>1.3596724524076147</PerformanceRatio>
+      <OpenCVTime>0.038864000000000003</OpenCVTime>
+      <CustomTime>0.082960999999999993</CustomTime>
+      <PerformanceRatio>2.1346490325236718</PerformanceRatio>
       <Accuracy>0.0012024681859230668</Accuracy>
       <ImageSize>65536.</ImageSize>
       <ImageType>grayscale</ImageType>
       <MemoryUsage>65536</MemoryUsage></_>
     <_>
       <Algorithm>HistogramEqualization</Algorithm>
-      <OpenCVTime>0.26979300000000001</OpenCVTime>
-      <CustomTime>0.52957600000000005</CustomTime>
-      <PerformanceRatio>1.9628974806610995</PerformanceRatio>
+      <OpenCVTime>0.16961700000000002</OpenCVTime>
+      <CustomTime>0.29039999999999999</CustomTime>
+      <PerformanceRatio>1.7120925378941967</PerformanceRatio>
       <Accuracy>15.001207871909756</Accuracy>
       <ImageSize>262144.</ImageSize>
       <ImageType>grayscale</ImageType>
       <MemoryUsage>262144</MemoryUsage></_>
     <_>
       <Algorithm>HistogramEqualization</Algorithm>
-      <OpenCVTime>0.97126699999999999</OpenCVTime>
-      <CustomTime>2.001541</CustomTime>
-      <PerformanceRatio>2.0607526045876159</PerformanceRatio>
+      <OpenCVTime>0.766926</OpenCVTime>
+      <CustomTime>1.4494049999999998</CustomTime>
+      <PerformanceRatio>1.8898889853779892</PerformanceRatio>
       <Accuracy>9.0012087908033322</Accuracy>
       <ImageSize>1048576.</ImageSize>
       <ImageType>grayscale</ImageType>

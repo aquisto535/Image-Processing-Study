@@ -76,6 +76,16 @@ public:
 	afx_msg void OnImageRotate();
 	afx_msg void OnImageMirror();
 	afx_msg void OnImageFlip();
+	afx_msg void OnFourierDft();
+	afx_msg void OnFourierDftrc();
+	afx_msg void OnFourierFft();
+	afx_msg void OnFreqFiltering();
+	afx_msg void OnEdgeRoberts();
+	afx_msg void OnEdgePrewit();
+	afx_msg void OnEdgeSobel();
+	afx_msg void OnEdgeCanny();
+	afx_msg void OnHoughLine();
+	afx_msg void OnHarrisCorner();
 };
 
 

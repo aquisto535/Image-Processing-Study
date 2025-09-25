@@ -37,6 +37,9 @@
 #define IDD_TRANSLATE                   332
 #define IDD_RESIZE                      334
 #define IDD_ROTATE                      337
+#define IDD_FREQUENCY_FILTERING         339
+#define IDD_CANNY_EDGE                  342
+#define IDD_HARRIS_CORNER               344
 #define IDC_WIDTH                       1000
 #define IDC_HEIGHT                      1001
 #define IDC_IMAGE_TYPE                  1002
@@ -78,6 +81,14 @@
 #define IDC_ROTATE3                     1035
 #define IDC_ROTATE4                     1036
 #define IDC_ANGLE                       1037
+#define IDC_FILTER_TYPE                 1038
+#define IDC_FILETER_SHAPE               1039
+#define IDC_CUTOFF_FREQ                 1040
+#define IDC_RADIUS_RANGE                1041
+#define IDC_CANNY_SIGMA                 1042
+#define IDC_LOW_THRESHOLD               1043
+#define IDC_HARRIS_THRESHOLD            1043
+#define IDC_HIGH_THRESHOLD              1044
 #define ID_32771                        32771
 #define ID_WINDOW_DUPLICATE             32772
 #define ID_32773                        32773
@@ -141,14 +152,36 @@
 #define ID_32831                        32831
 #define ID_IMAGE_MIRROR                 32832
 #define ID_IMAGE_FLIP                   32833
+#define ID_32834                        32834
+#define ID_32835                        32835
+#define ID_32836                        32836
+#define ID_FOURIER_DFT                  32837
+#define ID_FOURIER_DFTRC                32838
+#define ID_32839                        32839
+#define ID_FOURIER_FFT                  32840
+#define ID_32841                        32841
+#define ID_FREQ_FILTERING               32842
+#define ID_32843                        32843
+#define ID_Menu32844                    32844
+#define ID_32845                        32845
+#define ID_32846                        32846
+#define ID_EDGE_ROBERTS                 32847
+#define ID_EDGE_PREWIT                  32848
+#define ID_EDGE_SOBEL                   32849
+#define ID_32850                        32850
+#define ID_EDGE_CANNY                   32851
+#define ID_32852                        32852
+#define ID_HOUGH_LINE                   32853
+#define ID_32854                        32854
+#define ID_HARRIS_CORNER                32855
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        339
-#define _APS_NEXT_COMMAND_VALUE         32834
-#define _APS_NEXT_CONTROL_VALUE         1038
+#define _APS_NEXT_RESOURCE_VALUE        346
+#define _APS_NEXT_COMMAND_VALUE         32856
+#define _APS_NEXT_CONTROL_VALUE         1044
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

@@ -187,10 +187,13 @@
     <ClInclude Include="CAddNoiseDlg.h" />
     <ClInclude Include="CArithmeticLogicalDlg.h" />
     <ClInclude Include="CBrightnessContrastDlg.h" />
+    <ClInclude Include="CCannyEdgeDlg.h" />
     <ClInclude Include="CDiffusionDlg.h" />
     <ClInclude Include="CFileNewDlg.h" />
+    <ClInclude Include="CFreqFilteringDlg.h" />
     <ClInclude Include="CGammaCorrectionDlg.h" />
     <ClInclude Include="CGaussianDlg.h" />
+    <ClInclude Include="CHarrisCornerDlg.h" />
     <ClInclude Include="ChildFrm.h" />
     <ClInclude Include="CHistogramDlg.h" />
     <ClInclude Include="CResizeDlg.h" />
@@ -200,7 +203,9 @@
     <ClInclude Include="ImageTool.h" />
     <ClInclude Include="ImageToolDoc.h" />
     <ClInclude Include="ImageToolView.h" />
+    <ClInclude Include="IppFeature.h" />
     <ClInclude Include="IppFilter.h" />
+    <ClInclude Include="IppFourier.h" />
     <ClInclude Include="IppGeometry.h" />
     <ClInclude Include="IppImage\IppConvert.h" />
     <ClInclude Include="IppImage\IppDib.h" />
@@ -217,10 +222,13 @@
     <ClCompile Include="CAddNoiseDlg.cpp" />
     <ClCompile Include="CArithmeticLogicalDlg.cpp" />
     <ClCompile Include="CBrightnessContrastDlg.cpp" />
+    <ClCompile Include="CCannyEdgeDlg.cpp" />
     <ClCompile Include="CDiffusionDlg.cpp" />
     <ClCompile Include="CFileNewDlg.cpp" />
+    <ClCompile Include="CFreqFilteringDlg.cpp" />
     <ClCompile Include="CGammaCorrectionDlg.cpp" />
     <ClCompile Include="CGaussianDlg.cpp" />
+    <ClCompile Include="CHarrisCornerDlg.cpp" />
     <ClCompile Include="ChildFrm.cpp" />
     <ClCompile Include="CHistogramDlg.cpp" />
     <ClCompile Include="CResizeDlg.cpp" />
@@ -229,7 +237,9 @@
     <ClCompile Include="ImageTool.cpp" />
     <ClCompile Include="ImageToolDoc.cpp" />
     <ClCompile Include="ImageToolView.cpp" />
+    <ClCompile Include="IppFeature.cpp" />
     <ClCompile Include="IppFilter.cpp" />
+    <ClCompile Include="IppFourier.cpp" />
     <ClCompile Include="IppGeometry.cpp" />
     <ClCompile Include="IppImage\IppConvert.cpp" />
     <ClCompile Include="IppImage\IppDib.cpp" />
