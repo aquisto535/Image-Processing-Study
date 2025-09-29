@@ -1,4 +1,4 @@
-/******************************************************************************
+﻿/******************************************************************************
  *
  * IppImage.h
  *
@@ -20,36 +20,36 @@ template<typename T>
 class IppImage
 {
 protected:
-	int     width;  // ?????? ???? ??? (??? ????)
-	int     height; // ?????? ???? ??? (??? ????)
-	T**     pixels; // ??? ??????
+	int     width;  // 영상의 가로 크기 (픽셀 단위)
+	int     height; // 영상의 세로 크기 (픽셀 단위)
+	T**		pixels; // 픽셀 데이터
 
 public:
-	// ??????? ?????
+	// 생성자와 소멸자
 	IppImage();
 	IppImage(int w, int h);
 	IppImage(const IppImage<T>& img);
 	~IppImage();
 
-	// ????? ?????? ???
+	// 이미지 생성과 소멸
 	void    CreateImage(int w, int h);
 	void    DestroyImage();
 
-	// ??? ?? ????
+	// 픽셀 값 접근
 	T*      GetPixels()   const {
 		if (pixels) return pixels[0];
 		else return NULL;
 	}
 	T**     GetPixels2D() const { return pixels; }
 
-	// ???? ?????? ??????
+	// 대입 연산자 재정의
 	IppImage<T>& operator=(const IppImage<T>& img);
 
-	// ??? ?? ????
+	// 픽셀 값 설정
 	template<typename U> void Convert(const IppImage<U>& img, bool use_limit = false);
-	void    Convert(const IppImage<RGBBYTE> & img);
+	void    Convert(const IppImage<RGBBYTE> & img); //템플릿 전문화
 
-	// ???? ???? ???
+	// 영상 정보 반환
 	int     GetWidth()    const { return width; }
 	int     GetHeight()   const { return height; }
 	int     GetSize()     const { return width * height; }

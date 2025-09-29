@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "IppImage.h"
 #include "IppEnhance.h"
 #include <math.h>
@@ -22,7 +22,7 @@ void IppBrightness(IppByteImage& img, int n)
 
 	for (int i = 0; i < size; i++)
 	{
-		p[i] = limit(p[i] + n); // limit ÇÔ¼ö´Â 0~255 »çÀÌÀÇ °ªÀ» º¸ÀåÇÏ´Â ÇÔ¼ö
+		p[i] = limit(p[i] + n); // limit í•¨ìˆ˜ëŠ” 0~255 ì‚¬ì´ì˜ ê°’ì„ ë³´ì¥í•˜ëŠ” í•¨ìˆ˜
 	}
 }
 
@@ -33,7 +33,7 @@ void IppContrast(IppByteImage& img, int n)
 	
 	for (int i = 0; i < size; i++)
 	{
-		p[i] = static_cast<BYTE>(limit(p[i] + (p[i] - 128) * n / 100)); // contrast Á¶Á¤ °ø½Ä
+		p[i] = static_cast<BYTE>(limit(p[i] + (p[i] - 128) * n / 100)); // contrast ì¡°ì • ê³µì‹
 	}
 }
 
@@ -62,13 +62,13 @@ void IppHistogram(IppByteImage &img, float histo[256])
 	int size = img.GetSize();
 	BYTE* p = img.GetPixels();
 
-	// È÷½ºÅä±×·¥ °è»ê
+	// íˆìŠ¤í† ê·¸ë¨ ê³„ì‚°
 	int cnt[256];
 	memset(cnt, 0, sizeof(int) * 256);
 	for (int i = 0; i < size; i++)
 		cnt[p[i]]++;
 
-	// È÷½ºÅä±×·¥ Á¤±ÔÈ­(histogram normalization)
+	// íˆìŠ¤í† ê·¸ë¨ ì •ê·œí™”(histogram normalization)
 	for (int i = 0; i < 256; i++)
 	{
 		histo[i] = static_cast<float>(cnt[i]) / size;
@@ -81,7 +81,7 @@ void IppHistogramStretching(IppByteImage& img)
 	int size = img.GetSize();
 	BYTE* p = img.GetPixels();
 
-	// ÃÖ´ë, ÃÖ¼Ò ±×·¹ÀÌ½ºÄÉÀÏ °ª °è»ê
+	// ìµœëŒ€, ìµœì†Œ ê·¸ë ˆì´ìŠ¤ì¼€ì¼ ê°’ ê³„ì‚°
 	BYTE gray_max, gray_min;
 	gray_max = gray_min = p[0];
 	for (int i = 1; i < size; i++)
@@ -93,7 +93,7 @@ void IppHistogramStretching(IppByteImage& img)
 	if (gray_max == gray_min)
 		return;
 
-	// È÷½ºÅä±×·¥ ½ºÆ®·¹Äª
+	// íˆìŠ¤í† ê·¸ë¨ ìŠ¤íŠ¸ë ˆì¹­
 	for (int i = 0; i < size; i++)
 	{
 		p[i] = (p[i] - gray_min) * 255 / (gray_max - gray_min);
@@ -105,17 +105,17 @@ void IppHistogramEqualization(IppByteImage& img)
 	int size = img.GetSize();
 	BYTE* p = img.GetPixels();
 
-	// È÷½ºÅä±×·¥ °è»ê
+	// íˆìŠ¤í† ê·¸ë¨ ê³„ì‚°
 	float hist[256];
 	IppHistogram(img, hist);
 
-	// È÷½ºÅä±×·¥ ´©Àû ÇÔ¼ö °è»ê
+	// íˆìŠ¤í† ê·¸ë¨ ëˆ„ì  í•¨ìˆ˜ ê³„ì‚°
 	float cdf[256] = { 0.0, };
 	cdf[0] = hist[0];
 	for (int i = 1; i < 256; i++)
 		cdf[i] = cdf[i - 1] + hist[i];
 
-	// È÷½ºÅä±×·¥ ±ÕµîÈ­
+	// íˆìŠ¤í† ê·¸ë¨ ê· ë“±í™”
 	for (int i = 0; i < size; i++)
 	{
 		p[i] = static_cast<BYTE>(limit(cdf[p[i]] * 255));

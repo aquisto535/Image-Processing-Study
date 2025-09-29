@@ -1,24 +1,24 @@
-#pragma once
+ï»¿#pragma once
 #include "IppImage.h"
 
-// ¿µ»ó È­Áú Çâ»ó ÇÔ¼ö
+// ì˜ìƒ í™”ì§ˆ í–¥ìƒ í•¨ìˆ˜
 void IppInverse(IppByteImage& img);
 void IppBrightness(IppByteImage& img, int n);
 void IppContrast(IppByteImage& img, int n);
 void IppGammaCorrection(IppByteImage& img, float gamma);
 
-// È÷½ºÅä±×·¥ °ü·Ã ÇÔ¼ö
+// íˆìŠ¤í† ê·¸ë¨ ê´€ë ¨ í•¨ìˆ˜
 void IppHistogram(IppByteImage &img, float histo[256]);
 void IppHistogramStretching(IppByteImage& img);
 void IppHistogramEqualization(IppByteImage& img);
 
-// ¿µ»ó »ê¼ú ¿¬»ê ÇÔ¼ö
+// ì˜ìƒ ì‚°ìˆ  ì—°ì‚° í•¨ìˆ˜
 bool IppAdd(IppByteImage& img1, IppByteImage& img2, IppByteImage& img3);
 bool IppSub(IppByteImage& img1, IppByteImage& img2, IppByteImage& img3);
 bool IppAve(IppByteImage& img1, IppByteImage& img2, IppByteImage& img3);
 bool IppDiff(IppByteImage& img1, IppByteImage& img2, IppByteImage& img3);
 
-// ¿µ»ó ³í¸® ¿¬»ê ÇÔ¼ö
+// ì˜ìƒ ë…¼ë¦¬ ì—°ì‚° í•¨ìˆ˜
 bool IppAND(IppByteImage& img1, IppByteImage& img2, IppByteImage& img3);
 bool IppOR(IppByteImage& img1, IppByteImage& img2, IppByteImage& img3);
 

@@ -188,6 +188,7 @@
     <ClInclude Include="CArithmeticLogicalDlg.h" />
     <ClInclude Include="CBrightnessContrastDlg.h" />
     <ClInclude Include="CCannyEdgeDlg.h" />
+    <ClInclude Include="CColorCombineDlg.h" />
     <ClInclude Include="CDiffusionDlg.h" />
     <ClInclude Include="CFileNewDlg.h" />
     <ClInclude Include="CFreqFilteringDlg.h" />
@@ -203,6 +204,7 @@
     <ClInclude Include="ImageTool.h" />
     <ClInclude Include="ImageToolDoc.h" />
     <ClInclude Include="ImageToolView.h" />
+    <ClInclude Include="IppColor.h" />
     <ClInclude Include="IppFeature.h" />
     <ClInclude Include="IppFilter.h" />
     <ClInclude Include="IppFourier.h" />
@@ -223,6 +225,7 @@
     <ClCompile Include="CArithmeticLogicalDlg.cpp" />
     <ClCompile Include="CBrightnessContrastDlg.cpp" />
     <ClCompile Include="CCannyEdgeDlg.cpp" />
+    <ClCompile Include="CColorCombineDlg.cpp" />
     <ClCompile Include="CDiffusionDlg.cpp" />
     <ClCompile Include="CFileNewDlg.cpp" />
     <ClCompile Include="CFreqFilteringDlg.cpp" />
@@ -237,6 +240,7 @@
     <ClCompile Include="ImageTool.cpp" />
     <ClCompile Include="ImageToolDoc.cpp" />
     <ClCompile Include="ImageToolView.cpp" />
+    <ClCompile Include="IppColor.cpp" />
     <ClCompile Include="IppFeature.cpp" />
     <ClCompile Include="IppFilter.cpp" />
     <ClCompile Include="IppFourier.cpp" />

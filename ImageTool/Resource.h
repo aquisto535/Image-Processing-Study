@@ -40,6 +40,7 @@
 #define IDD_FREQUENCY_FILTERING         339
 #define IDD_CANNY_EDGE                  342
 #define IDD_HARRIS_CORNER               344
+#define IDD_COLOR_COMBINE               346
 #define IDC_WIDTH                       1000
 #define IDC_HEIGHT                      1001
 #define IDC_IMAGE_TYPE                  1002
@@ -89,6 +90,8 @@
 #define IDC_LOW_THRESHOLD               1043
 #define IDC_HARRIS_THRESHOLD            1043
 #define IDC_HIGH_THRESHOLD              1044
+#define IDC_COLOR_SPACE                 1044
+#define IDC_COMBO_IMAGE3                1047
 #define ID_32771                        32771
 #define ID_WINDOW_DUPLICATE             32772
 #define ID_32773                        32773
@@ -174,14 +177,31 @@
 #define ID_HOUGH_LINE                   32853
 #define ID_32854                        32854
 #define ID_HARRIS_CORNER                32855
+#define ID_32856                        32856
+#define ID_COLOR_GRAYSCALE              32857
+#define ID_32858                        32858
+#define ID_COLOR_SPLIT                  32859
+#define ID_32860                        32860
+#define ID_32861                        32861
+#define ID_32862                        32862
+#define ID_COLOR_SPLIT_RGB              32863
+#define ID_COLOR_SPLIT_HSI              32864
+#define ID_COLOR_SPLIT_YUV              32865
+#define ID_32866                        32866
+#define ID_32867                        32867
+#define ID_32868                        32868
+#define ID_32869                        32869
+#define ID_COLOR_COMBINE_RGB            32870
+#define ID_COLOR_COMBINE_HSI            32871
+#define ID_COLOR_COMBINE_YUV            32872
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        346
-#define _APS_NEXT_COMMAND_VALUE         32856
-#define _APS_NEXT_CONTROL_VALUE         1044
+#define _APS_NEXT_RESOURCE_VALUE        348
+#define _APS_NEXT_COMMAND_VALUE         32873
+#define _APS_NEXT_CONTROL_VALUE         1046
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
