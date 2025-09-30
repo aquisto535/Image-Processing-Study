@@ -34,6 +34,8 @@
 #include "CHarrisCornerDlg.h"
 #include "CColorCombineDlg.h"
 #include "IppColor.h"
+#include "CBinarizationDlg.h"
+#include "IppSegment.h"
 
 #include <propkey.h>
 #include <algorithm>
@@ -113,6 +115,11 @@ BEGIN_MESSAGE_MAP(CImageToolDoc, CDocument)
 	ON_COMMAND(ID_COLOR_COMBINE_RGB, &CImageToolDoc::OnColorCombineRgb)
 	ON_COMMAND(ID_COLOR_COMBINE_HSI, &CImageToolDoc::OnColorCombineHsi)
 	ON_COMMAND(ID_COLOR_COMBINE_YUV, &CImageToolDoc::OnColorCombineYuv)
+	ON_COMMAND(ID_COLOR_EDGE, &CImageToolDoc::OnColorEdge)
+	ON_UPDATE_COMMAND_UI(ID_COLOR_EDGE, &CImageToolDoc::OnUpdateColorEdge)
+	ON_COMMAND(ID_SEGMENT_BINARIZATION, &CImageToolDoc::OnSegmentBinarization)
+	ON_COMMAND(ID_SEGMENT_LABELING, &CImageToolDoc::OnSegmentLabeling)
+	ON_COMMAND(ID_CONTOUR_TRACING, &CImageToolDoc::OnContourTracing)
 END_MESSAGE_MAP()
 
 
@@ -398,10 +405,24 @@ void CImageToolDoc::OnHistoEqualization()
 	if (m_Dib.GetBitCount() == 8)
 	{
 		CONVERT_DIB_TO_BYTEIMAGE(m_Dib, img)
-		IppHistogramEqualization(img);
+			IppHistogramEqualization(img);
 		CONVERT_IMAGE_TO_DIB(img, dib)
 
-		AfxPrintInfo(_T("[히스토그램 균등화] 입력 영상: %s"), GetTitle());
+			AfxPrintInfo(_T("[히스토그램 균등화] 입력 영상: %s"), GetTitle());
+		AfxNewBitmap(dib);
+	}
+	else if (m_Dib.GetBitCount() == 24)
+	{
+		CONVERT_DIB_TO_RGBIMAGE(m_Dib, img)
+			IppByteImage imgY, imgU, imgV;
+		IppColorSplitYUV(img, imgY, imgU, imgV);
+		IppHistogramEqualization(imgY);
+
+		IppRgbImage imgRes;
+		IppColorCombineYUV(imgY, imgU, imgV, imgRes);
+		CONVERT_IMAGE_TO_DIB(imgRes, dib)
+
+			AfxPrintInfo(_T("[히스토그램 균등화] 입력 영상: %s"), GetTitle());
 		AfxNewBitmap(dib);
 	}
 
@@ -1145,4 +1166,98 @@ void CImageToolDoc::OnColorCombineYuv()
 				pDoc1->GetTitle(), pDoc2->GetTitle(), pDoc3->GetTitle());
 		AfxNewBitmap(dib);
 	}
+}
+
+void CImageToolDoc::OnColorEdge()
+{
+	CONVERT_DIB_TO_RGBIMAGE(m_Dib, img)
+	IppByteImage imgEdge;
+	IppColorEdge(img, imgEdge);
+	CONVERT_IMAGE_TO_DIB(imgEdge, dib)
+
+	AfxPrintInfo(_T("[컬러 엣지 검출] 입력 영상: %s"), GetTitle());
+	AfxNewBitmap(dib);
+}
+
+void CImageToolDoc::OnUpdateColorEdge(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(m_Dib.GetBitCount() == 24);
+}
+
+void CImageToolDoc::OnSegmentBinarization()
+{
+	CBinarizationDlg dlg;
+	dlg.SetImage(m_Dib);
+	if (dlg.DoModal() == IDOK)
+	{
+		CONVERT_DIB_TO_BYTEIMAGE(m_Dib, img)
+		IppByteImage imgRes;
+		IppBinarization(img, imgRes, dlg.m_nThreshold);
+		CONVERT_IMAGE_TO_DIB(imgRes, dib)
+
+		AfxPrintInfo(_T("[이진화] 입력 영상: %s, 임계값: %d"), GetTitle(), dlg.m_nThreshold);
+		AfxNewBitmap(dib);
+	}
+}
+
+void CImageToolDoc::OnSegmentLabeling()
+{
+	CONVERT_DIB_TO_BYTEIMAGE(m_Dib, img)
+		IppIntImage imgLabel;
+	std::vector<IppLabelInfo> labels;
+	int label_cnt = IppLabeling(img, imgLabel, labels);
+
+	// 객체를 감싸는 사각형 그리기
+	BYTE** ptr = img.GetPixels2D();
+	for (IppLabelInfo& info : labels)
+	{
+		for (int j = info.miny; j <= info.maxy; j++)
+			ptr[j][info.minx] = ptr[j][info.maxx] = 128;
+
+		for (int i = info.minx; i <= info.maxx; i++)
+			ptr[info.miny][i] = ptr[info.maxy][i] = 128;
+	}
+
+#if 0
+	for (IppLabelInfo& info : labels)
+	{
+		// 각각의 객체를 새 창으로 띄우기
+		IppByteImage imgObj(info.maxx - info.minx + 1, info.maxy - info.miny + 1);
+		BYTE** pObj = imgObj.GetPixels2D();
+		for (IppPoint& pt : info.pixels)
+			pObj[pt.y - info.miny][pt.x - info.minx] = 255;
+
+		CONVERT_IMAGE_TO_DIB(imgObj, dibObj)
+			AfxNewBitmap(dibObj);
+	}
+#endif
+
+	CONVERT_IMAGE_TO_DIB(img, dib)
+
+	AfxPrintInfo(_T("[레이블링] 입력 영상: %s, 객체 개수: %d"), GetTitle(), label_cnt);
+	AfxNewBitmap(dib);
+}
+
+void CImageToolDoc::OnContourTracing()
+{
+	CONVERT_DIB_TO_BYTEIMAGE(m_Dib, img)
+		IppIntImage imgLabel;
+	std::vector<IppLabelInfo> labels;
+	int label_cnt = IppLabeling(img, imgLabel, labels);
+
+	IppByteImage imgContour(img.GetWidth(), img.GetHeight());
+	BYTE** ptr = imgContour.GetPixels2D();
+	for (IppLabelInfo& info : labels)
+	{
+		std::vector<IppPoint> cp;
+		IppContourTracing(img, info.pixels[0].x, info.pixels[0].y, cp);
+
+		for (IppPoint& pt : cp)
+			ptr[pt.y][pt.x] = 255;
+	}
+
+	CONVERT_IMAGE_TO_DIB(imgContour, dib)
+
+	AfxPrintInfo(_T("[외곽선 추적] 입력 영상: %s, 객체 개수: %d"), GetTitle(), label_cnt);
+	AfxNewBitmap(dib);
 }

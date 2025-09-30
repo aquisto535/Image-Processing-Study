@@ -41,6 +41,7 @@
 #define IDD_CANNY_EDGE                  342
 #define IDD_HARRIS_CORNER               344
 #define IDD_COLOR_COMBINE               346
+#define IDD_BINARIZTION                 348
 #define IDC_WIDTH                       1000
 #define IDC_HEIGHT                      1001
 #define IDC_IMAGE_TYPE                  1002
@@ -91,7 +92,10 @@
 #define IDC_HARRIS_THRESHOLD            1043
 #define IDC_HIGH_THRESHOLD              1044
 #define IDC_COLOR_SPACE                 1044
+#define IDC_IMAGE_PREVIEW               1046
 #define IDC_COMBO_IMAGE3                1047
+#define IDC_THRESHOLD_SLIDER            1047
+#define IDC_THRESHOLD_EDIT              1048
 #define ID_32771                        32771
 #define ID_WINDOW_DUPLICATE             32772
 #define ID_32773                        32773
@@ -194,14 +198,22 @@
 #define ID_COLOR_COMBINE_RGB            32870
 #define ID_COLOR_COMBINE_HSI            32871
 #define ID_COLOR_COMBINE_YUV            32872
+#define ID_32873                        32873
+#define ID_COLOR_EDGE                   32874
+#define ID_32875                        32875
+#define ID_SEGMENT_BINARIZATION         32876
+#define ID_32877                        32877
+#define ID_SEGMENT_LABELING             32878
+#define ID_32879                        32879
+#define ID_CONTOUR_TRACING              32880
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        348
-#define _APS_NEXT_COMMAND_VALUE         32873
-#define _APS_NEXT_CONTROL_VALUE         1046
+#define _APS_NEXT_RESOURCE_VALUE        350
+#define _APS_NEXT_COMMAND_VALUE         32881
+#define _APS_NEXT_CONTROL_VALUE         1049
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

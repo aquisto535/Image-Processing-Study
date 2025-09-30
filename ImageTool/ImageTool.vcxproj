@@ -186,6 +186,7 @@
   <ItemGroup>
     <ClInclude Include="CAddNoiseDlg.h" />
     <ClInclude Include="CArithmeticLogicalDlg.h" />
+    <ClInclude Include="CBinarizationDlg.h" />
     <ClInclude Include="CBrightnessContrastDlg.h" />
     <ClInclude Include="CCannyEdgeDlg.h" />
     <ClInclude Include="CColorCombineDlg.h" />
@@ -214,6 +215,7 @@
     <ClInclude Include="IppImage\IppEnhance.h" />
     <ClInclude Include="IppImage\IppImage.h" />
     <ClInclude Include="IppImage\RGBBYTE.h" />
+    <ClInclude Include="IppSegment.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="OutputWnd.h" />
     <ClInclude Include="pch.h" />
@@ -223,6 +225,7 @@
   <ItemGroup>
     <ClCompile Include="CAddNoiseDlg.cpp" />
     <ClCompile Include="CArithmeticLogicalDlg.cpp" />
+    <ClCompile Include="CBinarizationDlg.cpp" />
     <ClCompile Include="CBrightnessContrastDlg.cpp" />
     <ClCompile Include="CCannyEdgeDlg.cpp" />
     <ClCompile Include="CColorCombineDlg.cpp" />
@@ -248,6 +251,7 @@
     <ClCompile Include="IppImage\IppConvert.cpp" />
     <ClCompile Include="IppImage\IppDib.cpp" />
     <ClCompile Include="IppImage\IppEnhance.cpp" />
+    <ClCompile Include="IppSegment.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="OutputWnd.cpp" />
     <ClCompile Include="pch.cpp">
